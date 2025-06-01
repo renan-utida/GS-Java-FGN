@@ -1,6 +1,6 @@
 package fgn; // Forest Guardian Network
 
-import fgn.modelo.EstacaoBombeiros;
+import fgn.modelo.*;
 
 import java.util.ArrayList;
 import java.util.Scanner;
@@ -14,12 +14,20 @@ import java.util.Scanner;
  */
 public class ForestGuardianNetwork {
     private static ArrayList<EstacaoBombeiros> estacoes;
+    private static ArrayList<AreaFlorestal> areasFlorestais;
+    private static ArrayList<Sensor> sensores;
+    private static ArrayList<Ocorrencia> ocorrencias;
+    private static ArrayList<Drone> drones;
     private static Scanner scanner;
     private static EstacaoBombeiros estacaoAtual;
+    private static int proximoIdOcorrencia = 1;
 
     public static void main(String[] args) {
         scanner = new Scanner(System.in);
         inicializarEstacoes();
+        inicializarAreasFlorestais();
+        inicializarSensores();
+        inicializarDrones();
 
         exibirTelaInicial();
         exibirEstacoesDisponiveis();
@@ -74,6 +82,65 @@ public class ForestGuardianNetwork {
                 "Cap. Fernanda Lima",
                 10734
         ));
+    }
+
+    /**
+     * Inicializa as áreas florestais próximas a cada estação
+     */
+    private static void inicializarAreasFlorestais() {
+        areasFlorestais = new ArrayList<>();
+
+        // Áreas próximas a Campinas (1231)
+        areasFlorestais.add(new AreaFlorestal(1, "Floresta Estadual Serra D'Água", "Campinas - Unidade de conservação", 10, 1231));
+        areasFlorestais.add(new AreaFlorestal(2, "Estação Ecológica de Valinhos", "Valinhos - Estação ecológica", 20, 1231));
+        areasFlorestais.add(new AreaFlorestal(3, "Serra das Cabras", "Campinas/Morungaba - APA com 1.078m altitude", 35, 1231));
+
+        // Áreas próximas a Piracicaba (1232)
+        areasFlorestais.add(new AreaFlorestal(4, "Área de Proteção Ambiental (APA) Tanquã", "Região de várzea com vegetação nativa", 30, 1232));
+        areasFlorestais.add(new AreaFlorestal(5, "Serra de São Pedro", "Área de mata atlântica", 35, 1232));
+        areasFlorestais.add(new AreaFlorestal(6, "Mata do Horto Florestal", "Área de pesquisa e conservação", 10, 1232));
+
+        // Áreas próximas a Limeira (1233)
+        areasFlorestais.add(new AreaFlorestal(7, "Parque Ecológico de Limeira", "Área de educação ambiental", 8, 1233));
+        areasFlorestais.add(new AreaFlorestal(8, "Floresta Estadual de Iracemápolis", "Unidade de conservação", 20, 1233));
+        areasFlorestais.add(new AreaFlorestal(9, "Mata do Horto Florestal de Cordeirópolis", "Área de reflorestamento", 25, 1233));
+
+        // Áreas próximas a Mogi Mirim (1234)
+        areasFlorestais.add(new AreaFlorestal(10, "Área de Preservação Permanente do Rio Mogi Guaçu", "Zona ripária", 10, 1234));
+        areasFlorestais.add(new AreaFlorestal(11, "Mata do Horto Florestal de Itapira", "Área de reflorestamento", 30, 1234));
+        areasFlorestais.add(new AreaFlorestal(12, "Reserva Biológica de Estiva Gerbi", "Área de proteção integral", 35, 1234));
+    }
+
+    /**
+     * Inicializa os sensores disponíveis no sistema
+     */
+    private static void inicializarSensores() {
+        sensores = new ArrayList<>();
+
+        sensores.add(new Sensor(1, "Sensor Térmico FGN-T01", "Térmico"));
+        sensores.add(new Sensor(2, "Sensor de Fumaça FGN-F02", "Fumaça"));
+        sensores.add(new Sensor(3, "Sensor Químico FGN-Q03", "Químico"));
+    }
+
+    /**
+     * Inicializa os drones do sistema
+     */
+    private static void inicializarDrones() {
+        drones = new ArrayList<>();
+        ocorrencias = new ArrayList<>();
+
+        // 2 drones por estação
+        drones.add(new Drone(1001, "FGN-Hawk Alpha", 1231));
+        drones.add(new Drone(1002, "FGN-Hawk Beta", 1231));
+
+        drones.add(new Drone(1003, "FGN-Eagle Alpha", 1232));
+        drones.add(new Drone(1004, "FGN-Eagle Beta", 1232));
+
+        drones.add(new Drone(1005, "FGN-Falcon Alpha", 1233));
+        drones.add(new Drone(1006, "FGN-Falcon Beta", 1233));
+
+        drones.add(new Drone(1007, "FGN-Condor Alpha", 1234));
+        drones.add(new Drone(1008, "FGN-Condor Beta", 1234));
     }
 
     /**
@@ -172,8 +239,7 @@ public class ForestGuardianNetwork {
                 switch (opcao) {
                     case 1:
                         System.out.println();
-                        System.out.println("🚧 Módulo de Gerenciamento de Drones em desenvolvimento...");
-                        System.out.println();
+                        gerenciarDrones();
                         break;
 
                     case 2:
@@ -207,6 +273,265 @@ public class ForestGuardianNetwork {
                 System.out.println();
             }
         }
+    }
+
+    /**
+     * Gerencia as operações relacionadas aos drones
+     */
+    private static void gerenciarDrones() {
+        boolean voltarMenu = false;
+
+        while (!voltarMenu) {
+            System.out.println("═══════════════════════════════════════════════════════════════════════════");
+            System.out.println("🚁 GERENCIAR DRONES - " + estacaoAtual.getNomeComandante());
+            System.out.println("═══════════════════════════════════════════════════════════════════════════");
+            System.out.println("Escolha uma das opções abaixo:");
+            System.out.println("1️⃣  🔍 Iniciar Varredura de Área Florestal");
+            System.out.println("2️⃣  📱 Relatar Denúncia de Usuário");
+            System.out.println("3️⃣  📋 Listar Todas as Ocorrências");
+            System.out.println("4️⃣  🔙 Voltar");
+            System.out.print("👉 Digite sua opção: ");
+
+            try {
+                int opcao = scanner.nextInt();
+                scanner.nextLine(); // Limpa o buffer
+
+                switch (opcao) {
+                    case 1:
+                        System.out.println();
+                        iniciarVarredura();
+                        break;
+
+                    case 2:
+                        System.out.println();
+                        System.out.println("🚧 Módulo de Denúncia de Usuário em desenvolvimento...");
+                        System.out.println();
+                        break;
+
+                    case 3:
+                        System.out.println();
+                        System.out.println("🚧 Módulo de Listagem de Ocorrências em desenvolvimento...");
+                        System.out.println();
+                        break;
+
+                    case 4:
+                        voltarMenu = true;
+                        break;
+
+                    default:
+                        System.out.println();
+                        System.out.println("❌ Opção inválida! Por favor, escolha uma opção de 1 a 4.");
+                        System.out.println();
+                        break;
+                }
+
+            } catch (Exception e) {
+                System.out.println();
+                System.out.println("❌ Entrada inválida! Digite apenas números.");
+                scanner.nextLine(); // Limpa o buffer em caso de erro
+                System.out.println();
+            }
+        }
+    }
+
+    /**
+     * Inicia o processo de varredura de área florestal
+     */
+    private static void iniciarVarredura() {
+        boolean voltarVarredura = false;
+
+        while (!voltarVarredura) {
+            System.out.println("═══════════════════════════════════════════════════════════════════════════");
+            System.out.println("🔍 VARREDURA DE ÁREA FLORESTAL");
+            System.out.println("═══════════════════════════════════════════════════════════════════════════");
+            System.out.println("Escolha uma das opções abaixo:");
+            System.out.println("1️⃣  🚨 Registrar Nova Ocorrência");
+            System.out.println("2️⃣  ✅ Registrar Área Segura");
+            System.out.println("3️⃣  🔙 Voltar");
+            System.out.print("👉 Digite sua opção: ");
+
+            try {
+                int opcao = scanner.nextInt();
+                scanner.nextLine(); // Limpa o buffer
+
+                switch (opcao) {
+                    case 1:
+                        System.out.println();
+                        registrarNovaOcorrencia();
+                        break;
+
+                    case 2:
+                        System.out.println();
+                        System.out.println("🚧 Em desenvolvimento...");
+                        System.out.println();
+                        break;
+
+                    case 3:
+                        voltarVarredura = true;
+                        break;
+
+                    default:
+                        System.out.println();
+                        System.out.println("❌ Opção inválida! Por favor, escolha uma opção de 1 a 3.");
+                        System.out.println();
+                        break;
+                }
+
+            } catch (Exception e) {
+                System.out.println();
+                System.out.println("❌ Entrada inválida! Digite apenas números.");
+                scanner.nextLine(); // Limpa o buffer em caso de erro
+                System.out.println();
+            }
+        }
+    }
+
+    /**
+     * Registra uma nova ocorrência de incêndio
+     */
+    private static void registrarNovaOcorrencia() {
+        System.out.println("═══════════════════════════════════════════════════════════════════════════");
+        System.out.println("🚨 REGISTRAR NOVA OCORRÊNCIA DE INCÊNDIO");
+        System.out.println("═══════════════════════════════════════════════════════════════════════════");
+        System.out.println();
+
+        // Listar áreas florestais da estação atual
+        ArrayList<AreaFlorestal> areasDisponiveis = obterAreasFlorestaisPorEstacao(estacaoAtual.getId());
+
+        if (areasDisponiveis.isEmpty()) {
+            System.out.println("❌ Nenhuma área florestal cadastrada para esta estação.");
+            return;
+        }
+
+        System.out.println("📍 Escolha o local onde teve o incêndio:");
+        System.out.println();
+
+        for (AreaFlorestal area : areasDisponiveis) {
+            area.exibirInformacoes();
+        }
+
+        System.out.print("👉 Escolha uma das opções: ");
+
+        try {
+            int opcaoArea = scanner.nextInt();
+            scanner.nextLine(); // Limpa o buffer
+
+            AreaFlorestal areaSelecionada = buscarAreaPorId(opcaoArea, areasDisponiveis);
+
+            if (areaSelecionada == null) {
+                System.out.println("❌ Opção inválida!");
+                System.out.println();
+                return;
+            }
+
+            System.out.println();
+            System.out.print("🔥 Quantos hectares estão sendo atingidos em média (1 - 200 hectares): ");
+
+            int hectares = scanner.nextInt();
+            scanner.nextLine(); // Limpa o buffer
+
+            if (hectares < 1 || hectares > 200) {
+                System.out.println("❌ Valor inválido! Deve estar entre 1 e 200 hectares.");
+                System.out.println();
+                return;
+            }
+
+            System.out.println();
+            System.out.println("🔍 Identificado por:");
+            System.out.println();
+
+            for (Sensor sensor : sensores) {
+                sensor.exibirInformacoes();
+            }
+
+            System.out.print("👉 Escolha o sensor que detectou: ");
+
+            int opcaoSensor = scanner.nextInt();
+            scanner.nextLine(); // Limpa o buffer
+
+            Sensor sensorSelecionado = buscarSensorPorId(opcaoSensor);
+
+            if (sensorSelecionado == null) {
+                System.out.println("❌ Sensor inválido!");
+                return;
+            }
+
+            // Calcular tempo de chegada (velocidade média 75 km/h)
+            int tempoChegada = calcularTempoChegada(areaSelecionada.getDistanciaKm(), 75);
+
+            // Criar nova ocorrência
+            Ocorrencia novaOcorrencia = new Ocorrencia(
+                    proximoIdOcorrencia++,
+                    areaSelecionada,
+                    hectares,
+                    sensorSelecionado,
+                    tempoChegada
+            );
+
+            ocorrencias.add(novaOcorrencia);
+
+            System.out.println();
+            novaOcorrencia.exibirRelatorio();
+
+        } catch (Exception e) {
+            System.out.println("❌ Entrada inválida! Digite apenas números.");
+            scanner.nextLine(); // Limpa o buffer em caso de erro
+        }
+    }
+
+    /**
+     * Obtém as áreas florestais de uma estação específica
+     * @param idEstacao ID da estação
+     * @return Lista de áreas florestais da estação
+     */
+    private static ArrayList<AreaFlorestal> obterAreasFlorestaisPorEstacao(int idEstacao) {
+        ArrayList<AreaFlorestal> areas = new ArrayList<>();
+        for (AreaFlorestal area : areasFlorestais) {
+            if (area.getIdEstacaoResponsavel() == idEstacao) {
+                areas.add(area);
+            }
+        }
+        return areas;
+    }
+
+    /**
+     * Busca uma área florestal por ID na lista disponível
+     * @param id ID da área
+     * @param areasDisponiveis Lista de áreas disponíveis
+     * @return AreaFlorestal encontrada ou null
+     */
+    private static AreaFlorestal buscarAreaPorId(int id, ArrayList<AreaFlorestal> areasDisponiveis) {
+        for (AreaFlorestal area : areasDisponiveis) {
+            if (area.getId() == id) {
+                return area;
+            }
+        }
+        return null;
+    }
+
+    /**
+     * Busca um sensor por ID
+     * @param id ID do sensor
+     * @return Sensor encontrado ou null
+     */
+    private static Sensor buscarSensorPorId(int id) {
+        for (Sensor sensor : sensores) {
+            if (sensor.getId() == id) {
+                return sensor;
+            }
+        }
+        return null;
+    }
+
+    /**
+     * Calcula tempo de chegada baseado na distância e velocidade
+     * @param distanciaKm Distância em km
+     * @param velocidadeKmH Velocidade em km/h
+     * @return Tempo em minutos
+     */
+    private static int calcularTempoChegada(int distanciaKm, int velocidadeKmH) {
+        double tempoHoras = (double) distanciaKm / velocidadeKmH;
+        return (int) Math.ceil(tempoHoras * 60); // Converter para minutos e arredondar para cima
     }
 
     /**
