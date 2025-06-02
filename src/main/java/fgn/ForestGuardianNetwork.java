@@ -257,7 +257,7 @@ public class ForestGuardianNetwork {
 
                     case 2:
                         System.out.println();
-                        System.out.println("🚧 Módulo de Monitoramento de Alertas em desenvolvimento...");
+                        AlertasIncendio.exibirMenuAlertas(ocorrencias, estacaoAtual, scanner);
                         System.out.println();
                         break;
 

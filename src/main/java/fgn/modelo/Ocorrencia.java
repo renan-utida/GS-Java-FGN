@@ -186,6 +186,16 @@ public class Ocorrencia {
     }
 
     /**
+     * Marca a ocorrência como resolvida (área segura)
+     * Usado quando o incêndio é apagado com sucesso
+     */
+    public void marcarComoSegura() {
+        this.statusOcorrencia = "Concluído";
+        this.nivelRisco = "Seguro";
+        this.hectaresAfetados = 0;
+    }
+
+    /**
      * Exibe relatório completo da ocorrência
      * @param estacaoResponsavel Estação responsável pela área
      */
