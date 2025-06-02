@@ -183,11 +183,11 @@ public class ForestGuardianNetwork {
                     System.out.println("📍 " + estacaoAtual.getNomeEstacao());
                     System.out.println();
 
-                    // ✅ NOVO: Carregar histórico da cidade automaticamente
+                    // Carregar histórico da cidade automaticamente
                     System.out.println("🔄 Carregando histórico da estação...");
                     Arquivo.carregarHistoricoDaCidade(estacaoAtual, ocorrencias, estacoes, areasFlorestais, drones);
 
-                    // ✅ NOVO: Ajustar próximo ID baseado nas ocorrências carregadas
+                    // Ajustar próximo ID baseado nas ocorrências carregadas
                     if (!ocorrencias.isEmpty()) {
                         int maiorId = 0;
                         for (Ocorrencia ocorrencia : ocorrencias) {
@@ -197,11 +197,7 @@ public class ForestGuardianNetwork {
                         }
                         proximoIdOcorrencia = maiorId + 1;
                     }
-
-                    System.out.println();
-
                     loginValido = true;
-
                 } else {
                     System.out.println("❌ ID inválido! Por favor, escolha um ID da lista acima.");
                     System.out.println();
@@ -236,6 +232,7 @@ public class ForestGuardianNetwork {
         boolean sistemaAtivo = true;
 
         while (sistemaAtivo) {
+            System.out.println();
             System.out.println("🎛️  MENU PRINCIPAL - " + estacaoAtual.getNomeEstacao());
             System.out.println("═══════════════════════════════════════════════════════════════════════════");
             System.out.println("Escolha uma das opções abaixo:");
@@ -263,7 +260,8 @@ public class ForestGuardianNetwork {
 
                     case 3:
                         System.out.println();
-                        exibirRelatorioEstacoes();
+                        RelatoriosEstatisticas.exibirMenuRelatorios(ocorrencias, estacoes,
+                                areasFlorestais, estacaoAtual, scanner);
                         System.out.println();
                         break;
 

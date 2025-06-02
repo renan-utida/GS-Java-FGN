@@ -40,6 +40,27 @@ public class Casos {
         }
 
         try {
+            // Drone operando antes de escolher local
+            System.out.println("🚁 DRONE SELECIONADO PARA MISSÃO:");
+            droneSelecionado.exibirInformacoes();
+            System.out.println("👀 INICIANDO VARREDURA AÉREA:");
+            System.out.println("═══════════════════════════════════════════════════════════════════════════");
+            droneSelecionado.operar(); // Metodo da classe pai Equipamento!
+            System.out.println("═══════════════════════════════════════════════════════════════════════════");
+            System.out.println();
+
+            // Simular tempo de varredura
+            System.out.println("⏳ Processando dados da varredura...");
+            try {
+                Thread.sleep(2500);
+            } catch (InterruptedException e) {
+                Thread.currentThread().interrupt();
+            }
+
+            // Mensagem personalizada do drone
+            droneSelecionado.exibirAreaIdentificada();
+            System.out.println();
+
             // Listar áreas florestais da estação atual
             ArrayList<AreaFlorestal> areasDisponiveis = obterAreasFlorestaisPorEstacao(areasFlorestais, estacaoAtual.getIdEstacao());
 
@@ -47,9 +68,6 @@ public class Casos {
                 System.out.println("❌ Nenhuma área florestal cadastrada para esta estação.");
                 return proximoIdOcorrencia;
             }
-
-            System.out.println("📍 Escolha o local onde teve o incêndio:");
-            System.out.println();
 
             for (AreaFlorestal area : areasDisponiveis) {
                 area.exibirInformacoes();
@@ -80,7 +98,6 @@ public class Casos {
 
             System.out.println();
             System.out.println("🔍 Identificado por:");
-            System.out.println();
 
             for (Sensor sensor : sensores) {
                 sensor.exibirInformacoes();
@@ -96,6 +113,24 @@ public class Casos {
             if (sensorSelecionado == null) {
                 System.out.println("❌ Sensor inválido!");
                 return proximoIdOcorrencia;
+            }
+
+            // Sensor operando após seleção
+            System.out.println();
+            System.out.println("🔬 INICIANDO ANÁLISE DO SENSOR:");
+            try {
+                Thread.sleep(2000);
+            } catch (InterruptedException e) {
+                Thread.currentThread().interrupt();
+            }
+            System.out.println();
+            sensorSelecionado.operar(); // Metodo da classe pai Equipamento!
+            System.out.println("═══════════════════════════════════════════════════════════════════════════");
+            System.out.println();
+            try {
+                Thread.sleep(2500);
+            } catch (InterruptedException e) {
+                Thread.currentThread().interrupt();
             }
 
             // Calcular tempo de chegada (velocidade média 75 km/h)
@@ -155,6 +190,26 @@ public class Casos {
         }
 
         try {
+            // 🚀 Drone operando para verificação
+            System.out.println("🚁 DRONE SELECIONADO PARA VERIFICAÇÃO:");
+            droneSelecionado.exibirInformacoes();
+            System.out.println("👀 INICIANDO VERIFICAÇÃO DE SEGURANÇA:");
+            System.out.println("═══════════════════════════════════════════════════════════════════════════");
+            droneSelecionado.operar(); // Metodo da classe pai Equipamento!
+            System.out.println("═══════════════════════════════════════════════════════════════════════════");
+            System.out.println();
+
+            // Simular tempo de verificação
+            System.out.println("⏳ Analisando condições de segurança...");
+            try {
+                Thread.sleep(2500);
+            } catch (InterruptedException e) {
+                Thread.currentThread().interrupt();
+            }
+
+            System.out.println("✅ Verificação concluída!");
+            System.out.println();
+
             // Listar áreas florestais da estação atual
             ArrayList<AreaFlorestal> areasDisponiveis = obterAreasFlorestaisPorEstacao(areasFlorestais, estacaoAtual.getIdEstacao());
 
@@ -350,6 +405,8 @@ public class Casos {
             System.out.println("═══════════════════════════════════════════════════════════════════════════");
             System.out.println("🚁 DRONE DESPACHADO PARA VERIFICAÇÃO");
             System.out.println("═══════════════════════════════════════════════════════════════════════════");
+
+            droneSelecionado.operar(); // Metodo da classe pai Equipamento!
             System.out.println("🚁 " + droneSelecionado.getModeloDrone() + " (#" + droneSelecionado.getIdDrone() + ") está a caminho!");
             System.out.println("📍 Destino: " + areaSelecionada.getNomeArea());
             System.out.println("⏱️  Aguarde enquanto realizamos a verificação...");
@@ -359,7 +416,7 @@ public class Casos {
             // Simular tempo de verificação
             System.out.println("🔍 Verificação em andamento...");
             try {
-                Thread.sleep(2000); // Simula 2 segundos de verificação
+                Thread.sleep(3000); // Simula 3 segundos de verificação
             } catch (InterruptedException e) {
                 // Ignorar interrupção
             }
@@ -486,13 +543,12 @@ public class Casos {
             ocorrencia.exibirResumo(estacaoAtual);
         }
 
-        System.out.println("═══════════════════════════════════════════════════════════════════════════");
-
         // Salvar arquivo atualizado
         Arquivo.salvarHistoricoDaCidade(ocorrenciasDaEstacao, estacaoAtual);
-        System.out.println("💾 Histórico atualizado em 'historico_" + estacaoAtual.getCidade().toLowerCase().replace(" ", "_") + ".txt'");
-
         System.out.println();
+        System.out.println("💾 Histórico atualizado em 'historico_" + estacaoAtual.getCidade().toLowerCase().replace(" ", "_") + ".txt'");
+        System.out.println();
+
     }
 
     /**

@@ -107,9 +107,6 @@ public class AlertasIncendio {
         for (Ocorrencia ocorrencia : incendiosAtivos) {
             exibirResumoIncendio(ocorrencia, estacaoAtual);
         }
-
-        System.out.println("═══════════════════════════════════════════════════════════════════════════");
-        System.out.println();
     }
 
     /**
