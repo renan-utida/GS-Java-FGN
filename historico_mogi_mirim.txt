@@ -3,23 +3,23 @@
 ═══════════════════════════════════════════════════════════════════════════
 🏢 6º Batalhão de Bombeiros de Mogi Mirim
 👮 Cap. Fernanda Lima
-📅 Gerado em: 02/06/2025 10:55:00
+📅 Gerado em: 02/06/2025 19:12:36
 
-📊 Total de registros: 3
+📊 Total de registros: 5
 
 🚨 #1 - INCÊNDIO
     📍 Reserva Biológica de Estiva Gerbi
     🏢 Mogi Mirim, SP
-    ⚠️  Emergência | 📊 Ativo | ⏰ 02/06/2025 10:54
+    ⚠️  Emergência | 📊 Ativo | ⏰ 02/06/2025 19:11
     🔥 120 hectares afetados
-    🔍 Sensor de Fumaça FGN-F02
+    🔍 Drone de varredura
     🚁 FGN-Condor Alpha (#107)
     👤 Denúncia: Drone
 
 ✅ #2 - ÁREA SEGURA
     📍 Mata do Horto Florestal de Itapira
     🏢 Mogi Mirim, SP
-    ⚠️  Seguro | 📊 Concluído | ⏰ 02/06/2025 10:54
+    ⚠️  Seguro | 📊 Concluído | ⏰ 02/06/2025 19:11
     🔍 Drone de varredura
     🚁 FGN-Condor Alpha (#107)
     👤 Denúncia: Drone
@@ -27,8 +27,26 @@
 ✅ #3 - ÁREA SEGURA
     📍 Área de Preservação Permanente do Rio Mogi Guaçu
     🏢 Mogi Mirim, SP
-    ⚠️  Seguro | 📊 Concluído | ⏰ 02/06/2025 10:54
+    ⚠️  Seguro | 📊 Concluído | ⏰ 02/06/2025 19:11
     🔍 Drone de varredura
+    🚁 FGN-Condor Alpha (#107)
+    👤 Denúncia: Drone
+
+🚨 #4 - INCÊNDIO
+    📍 Área de Preservação Permanente do Rio Mogi Guaçu
+    🏢 Mogi Mirim, SP
+    ⚠️  Investigação | 📊 Ativo | ⏰ 02/06/2025 19:12
+    🔥 35 hectares afetados
+    🔍 Sensor de Fumaça FGN-F02
+    🚁 FGN-Condor Alpha (#107)
+    👤 Denúncia: Drone
+
+🚨 #5 - INCÊNDIO
+    📍 Reserva Biológica de Estiva Gerbi
+    🏢 Mogi Mirim, SP
+    ⚠️  Alerta Ativo | 📊 Ativo | ⏰ 02/06/2025 19:12
+    🔥 90 hectares afetados
+    🔍 Sensor Químico FGN-Q03
     🚁 FGN-Condor Alpha (#107)
     👤 Denúncia: Drone
 

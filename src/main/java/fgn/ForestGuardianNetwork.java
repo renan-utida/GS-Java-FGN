@@ -249,7 +249,10 @@ public class ForestGuardianNetwork {
                 switch (opcao) {
                     case 1:
                         System.out.println();
-                        gerenciarDrones();
+                        proximoIdOcorrencia = Varredura.gerenciarDrones(
+                                areasFlorestais, sensores, drones, ocorrencias,
+                                proximoIdOcorrencia, estacaoAtual, estacoes, scanner
+                        );
                         break;
 
                     case 2:
@@ -402,26 +405,6 @@ public class ForestGuardianNetwork {
                 System.out.println();
             }
         }
-    }
-
-    /**
-     * Exibe relatório completo de todas as estações cadastradas
-     */
-    private static void exibirRelatorioEstacoes() {
-        System.out.println("═══════════════════════════════════════════════════════════════════════════");
-        System.out.println("📊 RELATÓRIO - ESTAÇÕES DE BOMBEIROS CADASTRADAS");
-        System.out.println("═══════════════════════════════════════════════════════════════════════════");
-        System.out.println();
-
-        for (EstacaoBombeiros estacao : estacoes) {
-            estacao.exibirRelatorio();
-        }
-
-        System.out.println("═══════════════════════════════════════════════════════════════════════════");
-        System.out.println("📈 Total de estações ativas: " + estacoes.size());
-        System.out.println("🌍 Área de cobertura: Interior de São Paulo");
-        System.out.println("═══════════════════════════════════════════════════════════════════════════");
-        System.out.println();
     }
 
     /**

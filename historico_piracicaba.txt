@@ -1,0 +1,38 @@
+═══════════════════════════════════════════════════════════════════════════
+📋 HISTÓRICO DE OCORRÊNCIAS - PIRACICABA
+═══════════════════════════════════════════════════════════════════════════
+🏢 Corpo de Bombeiros de Piracicaba
+👮 Cap. Ana Paula Santos
+📅 Gerado em: 02/06/2025 19:13:53
+
+📊 Total de registros: 3
+
+🚨 #1 - INCÊNDIO
+    📍 Serra de São Pedro
+    🏢 Piracicaba, SP
+    ⚠️  Alerta Ativo | 📊 Ativo | ⏰ 02/06/2025 19:13
+    🔥 67 hectares afetados
+    🔍 Sensor Térmico FGN-T01
+    🚁 FGN-Eagle Alpha (#103)
+    👤 Denúncia: Drone
+
+🚨 #2 - INCÊNDIO
+    📍 Área de Proteção Ambiental (APA) Tanquã
+    🏢 Piracicaba, SP
+    ⚠️  Investigação | 📊 Ativo | ⏰ 02/06/2025 19:13
+    🔥 24 hectares afetados
+    🔍 Sensor de Fumaça FGN-F02
+    🚁 FGN-Eagle Alpha (#103)
+    👤 Denúncia: Drone
+
+✅ #3 - ÁREA SEGURA
+    📍 Mata do Horto Florestal
+    🏢 Piracicaba, SP
+    ⚠️  Seguro | 📊 Concluído | ⏰ 02/06/2025 19:13
+    🔍 Drone de varredura
+    🚁 FGN-Eagle Alpha (#103)
+    👤 Denúncia: Drone
+
+═══════════════════════════════════════════════════════════════════════════
+🌲 Forest Guardian Network - Piracicaba 🌲
+═══════════════════════════════════════════════════════════════════════════

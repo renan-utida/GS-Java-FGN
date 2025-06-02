@@ -2,6 +2,8 @@ package fgn.modelo;
 
 import java.time.format.DateTimeFormatter;
 import java.util.ArrayList;
+import java.util.HashMap;
+import java.util.Map;
 import java.util.Scanner;
 
 /**
@@ -239,7 +241,7 @@ public class AlertasIncendio {
     }
 
     /**
-     * Atende todas as ocorrências no local - resolve todos os incêndios ativos de uma vez
+     * Atende todas as ocorrências de um local específico - resolve todos os incêndios ativos de uma área
      * @param ocorrencias Lista de ocorrências
      * @param estacaoAtual Estação atual logada
      * @param scanner Scanner para entrada do usuário
@@ -267,83 +269,110 @@ public class AlertasIncendio {
             return;
         }
 
-        // Mostrar casos de incêndio primeiro
-        System.out.println("🚨 CASOS DE INCÊNDIO ATIVOS:");
-        System.out.println();
+        // Agrupar incêndios por local (área florestal)
+        HashMap<Integer, ArrayList<Ocorrencia>> incendiosPorLocal = new HashMap<>();
+        HashMap<Integer, String> nomesLocais = new HashMap<>();
+
         for (Ocorrencia ocorrencia : incendiosAtivos) {
-            exibirResumoIncendio(ocorrencia, estacaoAtual);
+            int idArea = ocorrencia.getAreaAfetada().getIdArea();
+            String nomeArea = ocorrencia.getAreaAfetada().getNomeArea();
+
+            if (!incendiosPorLocal.containsKey(idArea)) {
+                incendiosPorLocal.put(idArea, new ArrayList<>());
+                nomesLocais.put(idArea, nomeArea);
+            }
+            incendiosPorLocal.get(idArea).add(ocorrencia);
+        }
+
+        // Mostrar casos de incêndio agrupados por local
+        System.out.println("🚨 CASOS DE INCÊNDIO ATIVOS POR LOCAL:");
+        System.out.println();
+
+        for (Map.Entry<Integer, ArrayList<Ocorrencia>> entry : incendiosPorLocal.entrySet()) {
+            int idArea = entry.getKey();
+            ArrayList<Ocorrencia> ocorrenciasDoLocal = entry.getValue();
+            String nomeLocal = nomesLocais.get(idArea);
+
+            System.out.println("📍 " + nomeLocal + " (ID: " + idArea + "):");
+            for (Ocorrencia ocorrencia : ocorrenciasDoLocal) {
+                System.out.println("   🚨 #" + ocorrencia.getIdOcorrencia() + " - " + ocorrencia.getHectaresAfetados() + " hectares | " + ocorrencia.getNivelRisco());
+            }
+            System.out.println();
         }
 
         System.out.println("═══════════════════════════════════════════════════════════════════════════");
-        System.out.println("🚒 SELECIONE UM LOCAL PARA ATENDIMENTO GERAL:");
+        System.out.println("🚒 SELECIONE UM LOCAL PARA ATENDIMENTO:");
         System.out.println("═══════════════════════════════════════════════════════════════════════════");
         System.out.println();
 
-        // Mostrar menu simples com IDs e locais
-        for (Ocorrencia ocorrencia : incendiosAtivos) {
-            System.out.println("#" + ocorrencia.getIdOcorrencia() + " - " + ocorrencia.getAreaAfetada().getNomeArea());
+        // Mostrar menu de locais disponíveis
+        for (Map.Entry<Integer, String> entry : nomesLocais.entrySet()) {
+            int idArea = entry.getKey();
+            String nomeLocal = entry.getValue();
+            int quantidadeIncendios = incendiosPorLocal.get(idArea).size();
+
+            System.out.println(idArea + ". " + nomeLocal + " (" + quantidadeIncendios + " incêndio(s) ativo(s))");
         }
 
         System.out.println();
-        System.out.print("🚒 Digite o ID de qualquer área para atender TODOS os incêndios da cidade: ");
+        System.out.print("🚒 Digite o ID da área para atender TODOS os incêndios do local: ");
 
         try {
-            int idEscolhido = scanner.nextInt();
+            int idAreaEscolhida = scanner.nextInt();
             scanner.nextLine(); // Limpa o buffer
 
-            // Verificar se o ID escolhido existe
-            boolean idValido = false;
-            for (Ocorrencia ocorrencia : incendiosAtivos) {
-                if (ocorrencia.getIdOcorrencia() == idEscolhido) {
-                    idValido = true;
-                    break;
-                }
-            }
-
-            if (!idValido) {
-                System.out.println("❌ ID inválido! Nenhuma ocorrência ativa encontrada com este ID.");
+            // Verificar se o ID da área existe
+            if (!incendiosPorLocal.containsKey(idAreaEscolhida)) {
+                System.out.println("❌ ID inválido! Nenhuma área encontrada com este ID.");
                 System.out.println();
                 return;
             }
 
-            // Mostrar processo de atendimento geral
-            System.out.println();
-            System.out.println("═══════════════════════════════════════════════════════════════════════════");
-            System.out.println("🚒 OPERAÇÃO ESPECIAL - ATENDIMENTO GERAL DE INCÊNDIOS");
-            System.out.println("═══════════════════════════════════════════════════════════════════════════");
-            System.out.println("🌆 Cidade: " + estacaoAtual.getCidade());
-            System.out.println("🚨 Total de incêndios a serem atendidos: " + incendiosAtivos.size());
-            System.out.println();
-            System.out.println("📍 Locais em atendimento:");
+            ArrayList<Ocorrencia> ocorrenciasDoLocal = incendiosPorLocal.get(idAreaEscolhida);
+            String nomeLocalEscolhido = nomesLocais.get(idAreaEscolhida);
 
-            for (Ocorrencia ocorrencia : incendiosAtivos) {
-                System.out.println("   • #" + ocorrencia.getIdOcorrencia() + " - " + ocorrencia.getAreaAfetada().getNomeArea() + " (" + ocorrencia.getHectaresAfetados() + " hectares)");
+            // Mostrar processo de atendimento do local específico
+            System.out.println();
+            System.out.println("═══════════════════════════════════════════════════════════════════════════");
+            System.out.println("🚒 OPERAÇÃO LOCAL - " + nomeLocalEscolhido.toUpperCase());
+            System.out.println("═══════════════════════════════════════════════════════════════════════════");
+            System.out.println("📍 Local: " + nomeLocalEscolhido);
+            System.out.println("🚨 Incêndios no local: " + ocorrenciasDoLocal.size());
+            System.out.println();
+            System.out.println("🔥 Ocorrências sendo atendidas:");
+
+            int hectaresTotais = 0;
+            for (Ocorrencia ocorrencia : ocorrenciasDoLocal) {
+                System.out.println("   • #" + ocorrencia.getIdOcorrencia() + " - " + ocorrencia.getHectaresAfetados() + " hectares (" + ocorrencia.getNivelRisco() + ")");
+                hectaresTotais += ocorrencia.getHectaresAfetados();
             }
 
             System.out.println();
-            System.out.println("🚨 Despachando todas as equipes disponíveis!");
-            System.out.println("🚒 Operação coordenada em andamento...");
+            System.out.println("📊 Total de hectares afetados no local: " + hectaresTotais + " hectares");
+            System.out.println("🚨 Despachando equipes especializadas para " + nomeLocalEscolhido + "!");
+            System.out.println("🚒 Operação focada em andamento...");
             System.out.println("═══════════════════════════════════════════════════════════════════════════");
             System.out.println();
 
-            // Simular tempo de combate coordenado (3 segundos)
-            System.out.println("🔥 Combate coordenado aos incêndios em andamento...");
+            // Simular tempo de combate focado no local (4 segundos)
+            System.out.println("🔥 Combate focado aos incêndios de " + nomeLocalEscolhido + " em andamento...");
 
             try {
-                Thread.sleep(5000); // Espera 5 segundos
+                Thread.sleep(4000); // Espera 4 segundos
             } catch (InterruptedException e) {
-                // Ignorar interrupção
+                Thread.currentThread().interrupt();
             }
 
             // Mostrar sucesso
             System.out.println();
-            System.out.println("✅ TODOS OS INCÊNDIOS APAGADOS COM SUCESSO!");
-            System.out.println("🌿 Todas as " + incendiosAtivos.size() + " ocorrências agora estão seguras!");
-            System.out.println("👨‍🚒 Todas as equipes retornando à base...");
+            System.out.println("✅ TODOS OS INCÊNDIOS DE " + nomeLocalEscolhido.toUpperCase() + " APAGADOS!");
+            System.out.println("🌿 " + ocorrenciasDoLocal.size() + " ocorrência(s) do local agora estão seguras!");
+            System.out.println("📊 " + hectaresTotais + " hectares protegidos!");
+            System.out.println("👨‍🚒 Equipes retornando à base...");
             System.out.println();
 
-            // Marcar TODAS as ocorrências como seguras
-            for (Ocorrencia ocorrencia : incendiosAtivos) {
+            // Marcar APENAS as ocorrências do local como seguras
+            for (Ocorrencia ocorrencia : ocorrenciasDoLocal) {
                 ocorrencia.marcarComoSegura();
             }
 
@@ -351,8 +380,8 @@ public class AlertasIncendio {
             ArrayList<Ocorrencia> ocorrenciasDaEstacao = filtrarOcorrenciasPorEstacao(ocorrencias, estacaoAtual.getIdEstacao());
             Arquivo.salvarHistoricoDaCidade(ocorrenciasDaEstacao, estacaoAtual);
 
-            System.out.println("💾 Todos os registros atualizados automaticamente!");
-            System.out.println("🎉 Operação concluída com sucesso em " + estacaoAtual.getCidade() + "!");
+            System.out.println("💾 Registros do local atualizados automaticamente!");
+            System.out.println("🎉 Operação em " + nomeLocalEscolhido + " concluída com sucesso!");
             System.out.println();
 
         } catch (Exception e) {
@@ -361,6 +390,101 @@ public class AlertasIncendio {
             System.out.println();
         }
     }
+
+//        // Mostrar casos de incêndio primeiro
+//        System.out.println("🚨 CASOS DE INCÊNDIO ATIVOS:");
+//        System.out.println();
+//        for (Ocorrencia ocorrencia : incendiosAtivos) {
+//            exibirResumoIncendio(ocorrencia, estacaoAtual);
+//        }
+//
+//        System.out.println("═══════════════════════════════════════════════════════════════════════════");
+//        System.out.println("🚒 SELECIONE UM LOCAL PARA ATENDIMENTO GERAL:");
+//        System.out.println("═══════════════════════════════════════════════════════════════════════════");
+//        System.out.println();
+//
+//        // Mostrar menu simples com IDs e locais
+//        for (Ocorrencia ocorrencia : incendiosAtivos) {
+//            System.out.println("#" + ocorrencia.getIdOcorrencia() + " - " + ocorrencia.getAreaAfetada().getNomeArea());
+//        }
+//
+//        System.out.println();
+//        System.out.print("🚒 Digite o ID de qualquer área para atender TODOS os incêndios da cidade: ");
+//
+//        try {
+//            int idEscolhido = scanner.nextInt();
+//            scanner.nextLine(); // Limpa o buffer
+//
+//            // Verificar se o ID escolhido existe
+//            boolean idValido = false;
+//            for (Ocorrencia ocorrencia : incendiosAtivos) {
+//                if (ocorrencia.getIdOcorrencia() == idEscolhido) {
+//                    idValido = true;
+//                    break;
+//                }
+//            }
+//
+//            if (!idValido) {
+//                System.out.println("❌ ID inválido! Nenhuma ocorrência ativa encontrada com este ID.");
+//                System.out.println();
+//                return;
+//            }
+//
+//            // Mostrar processo de atendimento geral
+//            System.out.println();
+//            System.out.println("═══════════════════════════════════════════════════════════════════════════");
+//            System.out.println("🚒 OPERAÇÃO ESPECIAL - ATENDIMENTO GERAL DE INCÊNDIOS");
+//            System.out.println("═══════════════════════════════════════════════════════════════════════════");
+//            System.out.println("🌆 Cidade: " + estacaoAtual.getCidade());
+//            System.out.println("🚨 Total de incêndios a serem atendidos: " + incendiosAtivos.size());
+//            System.out.println();
+//            System.out.println("📍 Locais em atendimento:");
+//
+//            for (Ocorrencia ocorrencia : incendiosAtivos) {
+//                System.out.println("   • #" + ocorrencia.getIdOcorrencia() + " - " + ocorrencia.getAreaAfetada().getNomeArea() + " (" + ocorrencia.getHectaresAfetados() + " hectares)");
+//            }
+//
+//            System.out.println();
+//            System.out.println("🚨 Despachando todas as equipes disponíveis!");
+//            System.out.println("🚒 Operação coordenada em andamento...");
+//            System.out.println("═══════════════════════════════════════════════════════════════════════════");
+//            System.out.println();
+//
+//            // Simular tempo de combate coordenado (3 segundos)
+//            System.out.println("🔥 Combate coordenado aos incêndios em andamento...");
+//
+//            try {
+//                Thread.sleep(5000); // Espera 5 segundos
+//            } catch (InterruptedException e) {
+//                // Ignorar interrupção
+//            }
+//
+//            // Mostrar sucesso
+//            System.out.println();
+//            System.out.println("✅ TODOS OS INCÊNDIOS APAGADOS COM SUCESSO!");
+//            System.out.println("🌿 Todas as " + incendiosAtivos.size() + " ocorrências agora estão seguras!");
+//            System.out.println("👨‍🚒 Todas as equipes retornando à base...");
+//            System.out.println();
+//
+//            // Marcar TODAS as ocorrências como seguras
+//            for (Ocorrencia ocorrencia : incendiosAtivos) {
+//                ocorrencia.marcarComoSegura();
+//            }
+//
+//            // Atualizar arquivo automaticamente
+//            ArrayList<Ocorrencia> ocorrenciasDaEstacao = filtrarOcorrenciasPorEstacao(ocorrencias, estacaoAtual.getIdEstacao());
+//            Arquivo.salvarHistoricoDaCidade(ocorrenciasDaEstacao, estacaoAtual);
+//
+//            System.out.println("💾 Todos os registros atualizados automaticamente!");
+//            System.out.println("🎉 Operação concluída com sucesso em " + estacaoAtual.getCidade() + "!");
+//            System.out.println();
+//
+//        } catch (Exception e) {
+//            System.out.println("❌ Entrada inválida! Digite apenas números.");
+//            scanner.nextLine(); // Limpa o buffer em caso de erro
+//            System.out.println();
+//        }
+//    }
 
     /**
      * Filtra ocorrências de uma estação específica
