@@ -4,7 +4,6 @@ import fgn.modelo.*;
 
 import java.util.ArrayList;
 import java.util.Scanner;
-import java.io.*;
 
 /**
  * Classe principal do Sistema Forest Guardian Network
@@ -97,19 +96,19 @@ public class ForestGuardianNetwork {
         areasFlorestais.add(new AreaFlorestal(123453, "Serra das Cabras", "Campinas/Morungaba - APA com 1.078m altitude", 35, 1231));
 
         // Áreas próximas a Piracicaba (1232)
-        areasFlorestais.add(new AreaFlorestal(234564, "Área de Proteção Ambiental (APA) Tanquã", "Região de várzea com vegetação nativa", 30, 1232));
-        areasFlorestais.add(new AreaFlorestal(234565, "Serra de São Pedro", "Área de mata atlântica", 35, 1232));
-        areasFlorestais.add(new AreaFlorestal(234566, "Mata do Horto Florestal", "Área de pesquisa e conservação", 10, 1232));
+        areasFlorestais.add(new AreaFlorestal(234561, "Área de Proteção Ambiental (APA) Tanquã", "Região de várzea com vegetação nativa", 30, 1232));
+        areasFlorestais.add(new AreaFlorestal(234562, "Serra de São Pedro", "Área de mata atlântica", 35, 1232));
+        areasFlorestais.add(new AreaFlorestal(234563, "Mata do Horto Florestal", "Área de pesquisa e conservação", 10, 1232));
 
         // Áreas próximas a Limeira (1233)
-        areasFlorestais.add(new AreaFlorestal(234567, "Parque Ecológico de Limeira", "Área de educação ambiental", 8, 1233));
-        areasFlorestais.add(new AreaFlorestal(234568, "Floresta Estadual de Iracemápolis", "Unidade de conservação", 20, 1233));
-        areasFlorestais.add(new AreaFlorestal(234569, "Mata do Horto Florestal de Cordeirópolis", "Área de reflorestamento", 25, 1233));
+        areasFlorestais.add(new AreaFlorestal(345671, "Parque Ecológico de Limeira", "Área de educação ambiental", 8, 1233));
+        areasFlorestais.add(new AreaFlorestal(345672, "Floresta Estadual de Iracemápolis", "Unidade de conservação", 20, 1233));
+        areasFlorestais.add(new AreaFlorestal(345673, "Mata do Horto Florestal de Cordeirópolis", "Área de reflorestamento", 25, 1233));
 
         // Áreas próximas a Mogi Mirim (1234)
-        areasFlorestais.add(new AreaFlorestal(345670, "Área de Preservação Permanente do Rio Mogi Guaçu", "Zona ripária", 10, 1234));
-        areasFlorestais.add(new AreaFlorestal(345671, "Mata do Horto Florestal de Itapira", "Área de reflorestamento", 30, 1234));
-        areasFlorestais.add(new AreaFlorestal(345672, "Reserva Biológica de Estiva Gerbi", "Área de proteção integral", 35, 1234));
+        areasFlorestais.add(new AreaFlorestal(456781, "Área de Preservação Permanente do Rio Mogi Guaçu", "Zona ripária", 10, 1234));
+        areasFlorestais.add(new AreaFlorestal(456782, "Mata do Horto Florestal de Itapira", "Área de reflorestamento", 30, 1234));
+        areasFlorestais.add(new AreaFlorestal(456783, "Reserva Biológica de Estiva Gerbi", "Área de proteção integral", 35, 1234));
     }
 
     /**
@@ -124,24 +123,17 @@ public class ForestGuardianNetwork {
     }
 
     /**
-     * Inicializa os drones do sistema
+     * Inicializa os drones do sistema - 1 drone por estação
      */
     private static void inicializarDrones() {
         drones = new ArrayList<>();
         ocorrencias = new ArrayList<>();
 
-        // 2 drones por estação
+        // 1 drone por estação - mais simples e eficiente
         drones.add(new Drone(101, "FGN-Hawk Alpha", 1231));
-        drones.add(new Drone(102, "FGN-Hawk Beta", 1231));
-
         drones.add(new Drone(103, "FGN-Eagle Alpha", 1232));
-        drones.add(new Drone(104, "FGN-Eagle Beta", 1232));
-
         drones.add(new Drone(105, "FGN-Falcon Alpha", 1233));
-        drones.add(new Drone(106, "FGN-Falcon Beta", 1233));
-
         drones.add(new Drone(107, "FGN-Condor Alpha", 1234));
-        drones.add(new Drone(108, "FGN-Condor Beta", 1234));
     }
 
     /**
@@ -305,14 +297,16 @@ public class ForestGuardianNetwork {
 
                     case 2:
                         System.out.println();
-                        System.out.println("🚧 Módulo de Denúncia de Usuário em desenvolvimento...");
+                        proximoIdOcorrencia = Ocorrencia.relatarDenunciaUsuario(
+                                areasFlorestais, drones, ocorrencias,
+                                proximoIdOcorrencia, estacaoAtual, scanner
+                        );
                         System.out.println();
                         break;
 
                     case 3:
                         System.out.println();
-                        System.out.println("🚧 Módulo de Listagem de Ocorrências em desenvolvimento...");
-                        System.out.println();
+                        Ocorrencia.listarTodasOcorrencias(ocorrencias, estacoes);
                         break;
 
                     case 4:
@@ -358,13 +352,18 @@ public class ForestGuardianNetwork {
                 switch (opcao) {
                     case 1:
                         System.out.println();
-                        registrarNovaOcorrencia();
+                        proximoIdOcorrencia = Ocorrencia.registrarNovaOcorrencia(
+                                areasFlorestais, sensores, drones, ocorrencias,
+                                proximoIdOcorrencia, estacaoAtual, scanner
+                        );
                         break;
 
                     case 2:
                         System.out.println();
-                        System.out.println("🚧 Em desenvolvimento...");
-                        System.out.println();
+                        proximoIdOcorrencia = Ocorrencia.registrarAreaSegura(
+                                areasFlorestais, drones, ocorrencias,
+                                proximoIdOcorrencia, estacaoAtual, scanner
+                        );
                         break;
 
                     case 3:
@@ -385,154 +384,6 @@ public class ForestGuardianNetwork {
                 System.out.println();
             }
         }
-    }
-
-    /**
-     * Registra uma nova ocorrência de incêndio
-     */
-    private static void registrarNovaOcorrencia() {
-        System.out.println("═══════════════════════════════════════════════════════════════════════════");
-        System.out.println("🚨 REGISTRAR NOVA OCORRÊNCIA DE INCÊNDIO");
-        System.out.println("═══════════════════════════════════════════════════════════════════════════");
-        System.out.println();
-
-        // Listar áreas florestais da estação atual
-        ArrayList<AreaFlorestal> areasDisponiveis = obterAreasFlorestaisPorEstacao(estacaoAtual.getIdEstacao());
-
-        if (areasDisponiveis.isEmpty()) {
-            System.out.println("❌ Nenhuma área florestal cadastrada para esta estação.");
-            return;
-        }
-
-        System.out.println("📍 Escolha o local onde teve o incêndio:");
-        System.out.println();
-
-        for (AreaFlorestal area : areasDisponiveis) {
-            area.exibirInformacoes();
-        }
-
-        System.out.print("👉 Escolha uma das opções: ");
-
-        try {
-            int opcaoArea = scanner.nextInt();
-            scanner.nextLine(); // Limpa o buffer
-
-            AreaFlorestal areaSelecionada = buscarAreaPorId(opcaoArea, areasDisponiveis);
-
-            if (areaSelecionada == null) {
-                System.out.println("❌ Opção inválida!");
-                System.out.println();
-                return;
-            }
-
-            System.out.println();
-            System.out.print("🔥 Quantos hectares estão sendo atingidos em média (1 - 200 hectares): ");
-
-            int hectares = scanner.nextInt();
-            scanner.nextLine(); // Limpa o buffer
-
-            if (hectares < 1 || hectares > 200) {
-                System.out.println("❌ Valor inválido! Deve estar entre 1 e 200 hectares.");
-                System.out.println();
-                return;
-            }
-
-            System.out.println();
-            System.out.println("🔍 Identificado por:");
-            System.out.println();
-
-            for (Sensor sensor : sensores) {
-                sensor.exibirInformacoes();
-            }
-
-            System.out.print("👉 Escolha o sensor que detectou: ");
-
-            int opcaoSensor = scanner.nextInt();
-            scanner.nextLine(); // Limpa o buffer
-
-            Sensor sensorSelecionado = buscarSensorPorId(opcaoSensor);
-
-            if (sensorSelecionado == null) {
-                System.out.println("❌ Sensor inválido!");
-                return;
-            }
-
-            // Calcular tempo de chegada (velocidade média 75 km/h)
-            int tempoChegada = calcularTempoChegada(areaSelecionada.getDistanciaKm(), 75);
-
-            // Criar nova ocorrência
-            Ocorrencia novaOcorrencia = new Ocorrencia(
-                    proximoIdOcorrencia++,
-                    areaSelecionada,
-                    hectares,
-                    sensorSelecionado,
-                    tempoChegada
-            );
-
-            ocorrencias.add(novaOcorrencia);
-
-            System.out.println();
-            novaOcorrencia.exibirRelatorio();
-
-        } catch (Exception e) {
-            System.out.println("❌ Entrada inválida! Digite apenas números.");
-            scanner.nextLine(); // Limpa o buffer em caso de erro
-        }
-    }
-
-    /**
-     * Obtém as áreas florestais de uma estação específica
-     * @param idEstacao ID da estação
-     * @return Lista de áreas florestais da estação
-     */
-    private static ArrayList<AreaFlorestal> obterAreasFlorestaisPorEstacao(int idEstacao) {
-        ArrayList<AreaFlorestal> areas = new ArrayList<>();
-        for (AreaFlorestal area : areasFlorestais) {
-            if (area.getIdEstacaoResponsavel() == idEstacao) {
-                areas.add(area);
-            }
-        }
-        return areas;
-    }
-
-    /**
-     * Busca uma área florestal por ID na lista disponível
-     * @param idArea ID da área
-     * @param areasDisponiveis Lista de áreas disponíveis
-     * @return AreaFlorestal encontrada ou null
-     */
-    private static AreaFlorestal buscarAreaPorId(int idArea, ArrayList<AreaFlorestal> areasDisponiveis) {
-        for (AreaFlorestal area : areasDisponiveis) {
-            if (area.getIdArea() == idArea) {
-                return area;
-            }
-        }
-        return null;
-    }
-
-    /**
-     * Busca um sensor por ID
-     * @param idSensor ID do sensor
-     * @return Sensor encontrado ou null
-     */
-    private static Sensor buscarSensorPorId(int idSensor) {
-        for (Sensor sensor : sensores) {
-            if (sensor.getIdSensor() == idSensor) {
-                return sensor;
-            }
-        }
-        return null;
-    }
-
-    /**
-     * Calcula tempo de chegada baseado na distância e velocidade
-     * @param distanciaKm Distância em km
-     * @param velocidadeKmH Velocidade em km/h
-     * @return Tempo em minutos
-     */
-    private static int calcularTempoChegada(int distanciaKm, int velocidadeKmH) {
-        double tempoHoras = (double) distanciaKm / velocidadeKmH;
-        return (int) Math.ceil(tempoHoras * 60); // Converter para minutos e arredondar para cima
     }
 
     /**
