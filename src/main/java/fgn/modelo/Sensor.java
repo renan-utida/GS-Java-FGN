@@ -8,52 +8,51 @@ package fgn.modelo;
  * @version 1.0
  */
 public class Sensor {
-    private int id;
-    private String nome;
+    private int idSensor;
+    private String nomeSensor;
     private String tipo;
     private boolean ativo;
 
     /**
      * Construtor do Sensor
-     * @param id Identificador único do sensor
-     * @param nome Nome do sensor
+     * @param idSensor Identificador único do sensor
+     * @param nomeSensor Nome do sensor
      * @param tipo Tipo de sensor (Térmico, Fumaça, Químico)
      */
-    public Sensor(int id, String nome, String tipo) {
-        this.id = id;
-        this.nome = nome;
+    public Sensor(int idSensor, String nomeSensor, String tipo) {
+        this.idSensor = idSensor;
+        this.nomeSensor = nomeSensor;
         this.tipo = tipo;
         this.ativo = true;
     }
 
-    // Getters
-    public int getId() {
-        return id;
+    // Getters e Setters
+    public int getIdSensor() {
+        return idSensor;
     }
 
-    public String getNome() {
-        return nome;
+    public void setIdSensor(int idSensor) {
+        this.idSensor = idSensor;
+    }
+
+    public String getNomeSensor() {
+        return nomeSensor;
+    }
+
+    public void setNomeSensor(String nomeSensor) {
+        this.nomeSensor = nomeSensor;
     }
 
     public String getTipo() {
         return tipo;
     }
 
-    public boolean isAtivo() {
-        return ativo;
-    }
-
-    // Setters
-    public void setId(int id) {
-        this.id = id;
-    }
-
-    public void setNome(String nome) {
-        this.nome = nome;
-    }
-
     public void setTipo(String tipo) {
         this.tipo = tipo;
+    }
+
+    public boolean isAtivo() {
+        return ativo;
     }
 
     public void setAtivo(boolean ativo) {
@@ -64,6 +63,6 @@ public class Sensor {
      * Exibe informações do sensor
      */
     public void exibirInformacoes() {
-        System.out.println(id + ". " + nome + " (" + tipo + ")");
+        System.out.println(idSensor + ". " + nomeSensor + " (" + tipo + ")");
     }
 }

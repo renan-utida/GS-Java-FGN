@@ -8,7 +8,7 @@ package fgn.modelo;
  * @version 1.0
  */
 public class EstacaoBombeiros {
-    private int id;
+    private int idEstacao;
     private String nomeEstacao;
     private String endereco;
     private String cidade;
@@ -18,7 +18,7 @@ public class EstacaoBombeiros {
 
     /**
      * Construtor da EstacaoBombeiros
-     * @param id Identificador único da estação (4 dígitos)
+     * @param idEstacao Identificador único da estação (4 dígitos)
      * @param nomeEstacao Nome oficial da estação
      * @param endereco Endereço completo da estação
      * @param cidade Cidade onde está localizada
@@ -26,9 +26,9 @@ public class EstacaoBombeiros {
      * @param nomeComandante Nome do comandante responsável pela estação
      * @param idComandante ID do comandante (5 dígitos)
      */
-    public EstacaoBombeiros(int id, String nomeEstacao, String endereco, String cidade, String estado,
+    public EstacaoBombeiros(int idEstacao, String nomeEstacao, String endereco, String cidade, String estado,
                             String nomeComandante, int idComandante) {
-        this.id = id;
+        this.idEstacao = idEstacao;
         this.nomeEstacao = nomeEstacao;
         this.endereco = endereco;
         this.cidade = cidade;
@@ -38,12 +38,12 @@ public class EstacaoBombeiros {
     }
 
     // Getters e Setters
-    public int getId() {
-        return id;
+    public int getIdEstacao() {
+        return idEstacao;
     }
 
-    public void setId(int id) {
-        this.id = id;
+    public void setIdEstacao(int idEstacao) {
+        this.idEstacao = idEstacao;
     }
 
     public String getNomeEstacao() {
@@ -98,7 +98,7 @@ public class EstacaoBombeiros {
      * Exibe as informações formatadas da estação
      */
     public void exibirInformacoes() {
-        System.out.println("ID: " + id);
+        System.out.println("ID Estação: " + idEstacao);
         System.out.println("\tLocal: " + endereco);
         System.out.println("\tCidade: " + cidade + "-" + estado);
         System.out.println("\tComandante: " + nomeComandante + " (ID: " + idComandante + ")");
@@ -111,7 +111,7 @@ public class EstacaoBombeiros {
      */
     public void exibirRelatorio() {
         System.out.println(nomeEstacao + ":");
-        System.out.println("\tID: " + id);
+        System.out.println("\tID Estação: " + idEstacao);
         System.out.println("\tLocalização: " + endereco);
         System.out.println("\tCidade: " + cidade + "-" + estado);
         System.out.println("\tComandante Responsável: " + nomeComandante + " (ID: " + idComandante + ")");

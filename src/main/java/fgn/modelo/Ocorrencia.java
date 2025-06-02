@@ -11,32 +11,32 @@ import java.time.format.DateTimeFormatter;
  * @version 1.0
  */
 public class Ocorrencia {
-    private int id;
+    private int idOcorrencia;
     private AreaFlorestal areaAfetada;
     private int hectaresAfetados;
     private String nivelRisco;
     private Sensor sensorDetector;
     private LocalDateTime dataHoraDeteccao;
     private int tempoChegadaMinutos;
-    private String status;
+    private String statusOcorrencia;
 
     /**
      * Construtor da Ocorrência
-     * @param id Identificador único da ocorrência
+     * @param idOcorrencia Identificador único da ocorrência
      * @param areaAfetada Área florestal onde ocorreu o incêndio
      * @param hectaresAfetados Área em hectares afetada
      * @param sensorDetector Sensor que detectou o incêndio
      * @param tempoChegadaMinutos Tempo estimado para chegada dos bombeiros
      */
-    public Ocorrencia(int id, AreaFlorestal areaAfetada, int hectaresAfetados,
+    public Ocorrencia(int idOcorrencia, AreaFlorestal areaAfetada, int hectaresAfetados,
                       Sensor sensorDetector, int tempoChegadaMinutos) {
-        this.id = id;
+        this.idOcorrencia = idOcorrencia;
         this.areaAfetada = areaAfetada;
         this.hectaresAfetados = hectaresAfetados;
         this.sensorDetector = sensorDetector;
         this.tempoChegadaMinutos = tempoChegadaMinutos;
         this.dataHoraDeteccao = LocalDateTime.now();
-        this.status = "Ativo";
+        this.statusOcorrencia = "Ativo";
         this.nivelRisco = calcularNivelRisco(hectaresAfetados);
     }
 
@@ -56,8 +56,8 @@ public class Ocorrencia {
     }
 
     // Getters
-    public int getId() {
-        return id;
+    public int getIdOcorrencia() {
+        return idOcorrencia;
     }
 
     public AreaFlorestal getAreaAfetada() {
@@ -84,13 +84,13 @@ public class Ocorrencia {
         return tempoChegadaMinutos;
     }
 
-    public String getStatus() {
-        return status;
+    public String getStatusOcorrencia() {
+        return statusOcorrencia;
     }
 
     // Setters
-    public void setStatus(String status) {
-        this.status = status;
+    public void setStatusOcorrencia(String statusOcorrencia) {
+        this.statusOcorrencia = statusOcorrencia;
     }
 
     /**
@@ -100,15 +100,15 @@ public class Ocorrencia {
         DateTimeFormatter formatter = DateTimeFormatter.ofPattern("dd/MM/yyyy HH:mm:ss");
 
         System.out.println("═══════════════════════════════════════════════════════════════════════════");
-        System.out.println("🚨 OCORRÊNCIA REGISTRADA #" + id);
+        System.out.println("🚨 OCORRÊNCIA REGISTRADA #" + idOcorrencia);
         System.out.println("═══════════════════════════════════════════════════════════════════════════");
-        System.out.println("📍 Local: " + areaAfetada.getNome());
+        System.out.println("📍 Local: " + areaAfetada.getNomeArea());
         System.out.println("🔥 Área Afetada: " + hectaresAfetados + " hectares");
         System.out.println("⚠️  Nível de Risco: " + nivelRisco);
-        System.out.println("🔍 Detectado por: " + sensorDetector.getNome() + " (" + sensorDetector.getTipo() + ")");
+        System.out.println("🔍 Detectado por: " + sensorDetector.getNomeSensor() + " (" + sensorDetector.getTipo() + ")");
         System.out.println("⏰ Data/Hora: " + dataHoraDeteccao.format(formatter));
         System.out.println("🚒 Tempo Estimado Chegada: " + tempoChegadaMinutos + " minutos");
-        System.out.println("📊 Status: " + status);
+        System.out.println("📊 Status: " + statusOcorrencia);
         System.out.println("═══════════════════════════════════════════════════════════════════════════");
         System.out.println("🚨 Notificação enviada para o Corpo de Bombeiros!");
         System.out.println("🔔 Solicitando reforços para combate ao incêndio...");

@@ -8,37 +8,37 @@ package fgn.modelo;
  * @version 1.0
  */
 public class Drone {
-    private int id;
-    private String modelo;
+    private int idDrone;
+    private String modeloDrone;
     private int autonomiaHoras;
     private int velocidadeMaxKmH;
     private int alcanceKm;
-    private String status;
+    private String statusDrone;
     private int idEstacaoBase;
 
     /**
      * Construtor do Drone
-     * @param id Identificador único do drone
-     * @param modelo Modelo do drone
+     * @param idDrone Identificador único do drone
+     * @param modeloDrone Modelo do drone
      * @param idEstacaoBase ID da estação base do drone
      */
-    public Drone(int id, String modelo, int idEstacaoBase) {
-        this.id = id;
-        this.modelo = modelo;
+    public Drone(int idDrone, String modeloDrone, int idEstacaoBase) {
+        this.idDrone = idDrone;
+        this.modeloDrone = modeloDrone;
         this.autonomiaHoras = 6;
         this.velocidadeMaxKmH = 90;
         this.alcanceKm = 45;
-        this.status = "Disponível";
+        this.statusDrone = "Disponível";
         this.idEstacaoBase = idEstacaoBase;
     }
 
     // Getters
-    public int getId() {
-        return id;
+    public int getIdDrone() {
+        return idDrone;
     }
 
-    public String getModelo() {
-        return modelo;
+    public String getModeloDrone() {
+        return modeloDrone;
     }
 
     public int getAutonomiaHoras() {
@@ -53,8 +53,8 @@ public class Drone {
         return alcanceKm;
     }
 
-    public String getStatus() {
-        return status;
+    public String getStatusDrone() {
+        return statusDrone;
     }
 
     public int getIdEstacaoBase() {
@@ -62,8 +62,8 @@ public class Drone {
     }
 
     // Setters
-    public void setStatus(String status) {
-        this.status = status;
+    public void setStatusDrone(String statusDrone) {
+        this.statusDrone = statusDrone;
     }
 
     /**
@@ -83,9 +83,9 @@ public class Drone {
      * @return boolean indicando se a missão foi iniciada com sucesso
      */
     public boolean iniciarMissao(AreaFlorestal area) {
-        if ("Disponível".equals(this.status)) {
-            this.status = "Em Missão";
-            System.out.println("🚁 Drone #" + id + " iniciando varredura na " + area.getNome());
+        if ("Disponível".equals(this.statusDrone)) {
+            this.statusDrone = "Em Missão";
+            System.out.println("🚁 Drone #" + idDrone + " iniciando varredura na " + area.getNomeArea());
             return true;
         }
         return false;
@@ -95,7 +95,7 @@ public class Drone {
      * Finaliza missão atual
      */
     public void finalizarMissao() {
-        this.status = "Disponível";
-        System.out.println("🏠 Drone #" + id + " retornando à base para recarga");
+        this.statusDrone = "Disponível";
+        System.out.println("🏠 Drone #" + idDrone + " retornando à base para recarga");
     }
 }

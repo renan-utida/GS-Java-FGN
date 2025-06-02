@@ -4,6 +4,7 @@ import fgn.modelo.*;
 
 import java.util.ArrayList;
 import java.util.Scanner;
+import java.io.*;
 
 /**
  * Classe principal do Sistema Forest Guardian Network
@@ -91,24 +92,24 @@ public class ForestGuardianNetwork {
         areasFlorestais = new ArrayList<>();
 
         // Áreas próximas a Campinas (1231)
-        areasFlorestais.add(new AreaFlorestal(1, "Floresta Estadual Serra D'Água", "Campinas - Unidade de conservação", 10, 1231));
-        areasFlorestais.add(new AreaFlorestal(2, "Estação Ecológica de Valinhos", "Valinhos - Estação ecológica", 20, 1231));
-        areasFlorestais.add(new AreaFlorestal(3, "Serra das Cabras", "Campinas/Morungaba - APA com 1.078m altitude", 35, 1231));
+        areasFlorestais.add(new AreaFlorestal(123451, "Floresta Estadual Serra D'Água", "Campinas - Unidade de conservação", 10, 1231));
+        areasFlorestais.add(new AreaFlorestal(123452, "Estação Ecológica de Valinhos", "Valinhos - Estação ecológica", 20, 1231));
+        areasFlorestais.add(new AreaFlorestal(123453, "Serra das Cabras", "Campinas/Morungaba - APA com 1.078m altitude", 35, 1231));
 
         // Áreas próximas a Piracicaba (1232)
-        areasFlorestais.add(new AreaFlorestal(4, "Área de Proteção Ambiental (APA) Tanquã", "Região de várzea com vegetação nativa", 30, 1232));
-        areasFlorestais.add(new AreaFlorestal(5, "Serra de São Pedro", "Área de mata atlântica", 35, 1232));
-        areasFlorestais.add(new AreaFlorestal(6, "Mata do Horto Florestal", "Área de pesquisa e conservação", 10, 1232));
+        areasFlorestais.add(new AreaFlorestal(234564, "Área de Proteção Ambiental (APA) Tanquã", "Região de várzea com vegetação nativa", 30, 1232));
+        areasFlorestais.add(new AreaFlorestal(234565, "Serra de São Pedro", "Área de mata atlântica", 35, 1232));
+        areasFlorestais.add(new AreaFlorestal(234566, "Mata do Horto Florestal", "Área de pesquisa e conservação", 10, 1232));
 
         // Áreas próximas a Limeira (1233)
-        areasFlorestais.add(new AreaFlorestal(7, "Parque Ecológico de Limeira", "Área de educação ambiental", 8, 1233));
-        areasFlorestais.add(new AreaFlorestal(8, "Floresta Estadual de Iracemápolis", "Unidade de conservação", 20, 1233));
-        areasFlorestais.add(new AreaFlorestal(9, "Mata do Horto Florestal de Cordeirópolis", "Área de reflorestamento", 25, 1233));
+        areasFlorestais.add(new AreaFlorestal(234567, "Parque Ecológico de Limeira", "Área de educação ambiental", 8, 1233));
+        areasFlorestais.add(new AreaFlorestal(234568, "Floresta Estadual de Iracemápolis", "Unidade de conservação", 20, 1233));
+        areasFlorestais.add(new AreaFlorestal(234569, "Mata do Horto Florestal de Cordeirópolis", "Área de reflorestamento", 25, 1233));
 
         // Áreas próximas a Mogi Mirim (1234)
-        areasFlorestais.add(new AreaFlorestal(10, "Área de Preservação Permanente do Rio Mogi Guaçu", "Zona ripária", 10, 1234));
-        areasFlorestais.add(new AreaFlorestal(11, "Mata do Horto Florestal de Itapira", "Área de reflorestamento", 30, 1234));
-        areasFlorestais.add(new AreaFlorestal(12, "Reserva Biológica de Estiva Gerbi", "Área de proteção integral", 35, 1234));
+        areasFlorestais.add(new AreaFlorestal(345670, "Área de Preservação Permanente do Rio Mogi Guaçu", "Zona ripária", 10, 1234));
+        areasFlorestais.add(new AreaFlorestal(345671, "Mata do Horto Florestal de Itapira", "Área de reflorestamento", 30, 1234));
+        areasFlorestais.add(new AreaFlorestal(345672, "Reserva Biológica de Estiva Gerbi", "Área de proteção integral", 35, 1234));
     }
 
     /**
@@ -117,9 +118,9 @@ public class ForestGuardianNetwork {
     private static void inicializarSensores() {
         sensores = new ArrayList<>();
 
-        sensores.add(new Sensor(1, "Sensor Térmico FGN-T01", "Térmico"));
-        sensores.add(new Sensor(2, "Sensor de Fumaça FGN-F02", "Fumaça"));
-        sensores.add(new Sensor(3, "Sensor Químico FGN-Q03", "Químico"));
+        sensores.add(new Sensor(10, "Sensor Térmico FGN-T01", "Térmico"));
+        sensores.add(new Sensor(20, "Sensor de Fumaça FGN-F02", "Fumaça"));
+        sensores.add(new Sensor(30, "Sensor Químico FGN-Q03", "Químico"));
     }
 
     /**
@@ -130,17 +131,17 @@ public class ForestGuardianNetwork {
         ocorrencias = new ArrayList<>();
 
         // 2 drones por estação
-        drones.add(new Drone(1001, "FGN-Hawk Alpha", 1231));
-        drones.add(new Drone(1002, "FGN-Hawk Beta", 1231));
+        drones.add(new Drone(101, "FGN-Hawk Alpha", 1231));
+        drones.add(new Drone(102, "FGN-Hawk Beta", 1231));
 
-        drones.add(new Drone(1003, "FGN-Eagle Alpha", 1232));
-        drones.add(new Drone(1004, "FGN-Eagle Beta", 1232));
+        drones.add(new Drone(103, "FGN-Eagle Alpha", 1232));
+        drones.add(new Drone(104, "FGN-Eagle Beta", 1232));
 
-        drones.add(new Drone(1005, "FGN-Falcon Alpha", 1233));
-        drones.add(new Drone(1006, "FGN-Falcon Beta", 1233));
+        drones.add(new Drone(105, "FGN-Falcon Alpha", 1233));
+        drones.add(new Drone(106, "FGN-Falcon Beta", 1233));
 
-        drones.add(new Drone(1007, "FGN-Condor Alpha", 1234));
-        drones.add(new Drone(1008, "FGN-Condor Beta", 1234));
+        drones.add(new Drone(107, "FGN-Condor Alpha", 1234));
+        drones.add(new Drone(108, "FGN-Condor Beta", 1234));
     }
 
     /**
@@ -204,12 +205,12 @@ public class ForestGuardianNetwork {
 
     /**
      * Busca uma estação pelo ID informado
-     * @param id ID da estação a ser buscada
+     * @param idEstacao ID da estação a ser buscada
      * @return EstacaoBombeiros encontrada ou null se não existir
      */
-    private static EstacaoBombeiros buscarEstacaoPorId(int id) {
+    private static EstacaoBombeiros buscarEstacaoPorId(int idEstacao) {
         for (EstacaoBombeiros estacao : estacoes) {
-            if (estacao.getId() == id) {
+            if (estacao.getIdEstacao() == idEstacao) {
                 return estacao;
             }
         }
@@ -286,10 +287,10 @@ public class ForestGuardianNetwork {
             System.out.println("🚁 GERENCIAR DRONES - " + estacaoAtual.getNomeComandante());
             System.out.println("═══════════════════════════════════════════════════════════════════════════");
             System.out.println("Escolha uma das opções abaixo:");
-            System.out.println("1️⃣  🔍 Iniciar Varredura de Área Florestal");
-            System.out.println("2️⃣  📱 Relatar Denúncia de Usuário");
-            System.out.println("3️⃣  📋 Listar Todas as Ocorrências");
-            System.out.println("4️⃣  🔙 Voltar");
+            System.out.println("1.  🔍 Iniciar Varredura de Área Florestal");
+            System.out.println("2.  📱 Relatar Denúncia de Usuário");
+            System.out.println("3.  📋 Listar Todas as Ocorrências");
+            System.out.println("4.  🔙 Voltar");
             System.out.print("👉 Digite sua opção: ");
 
             try {
@@ -345,9 +346,9 @@ public class ForestGuardianNetwork {
             System.out.println("🔍 VARREDURA DE ÁREA FLORESTAL");
             System.out.println("═══════════════════════════════════════════════════════════════════════════");
             System.out.println("Escolha uma das opções abaixo:");
-            System.out.println("1️⃣  🚨 Registrar Nova Ocorrência");
-            System.out.println("2️⃣  ✅ Registrar Área Segura");
-            System.out.println("3️⃣  🔙 Voltar");
+            System.out.println("1.  🚨 Registrar Nova Ocorrência");
+            System.out.println("2.  ✅ Registrar Área Segura");
+            System.out.println("3.  🔙 Voltar");
             System.out.print("👉 Digite sua opção: ");
 
             try {
@@ -396,7 +397,7 @@ public class ForestGuardianNetwork {
         System.out.println();
 
         // Listar áreas florestais da estação atual
-        ArrayList<AreaFlorestal> areasDisponiveis = obterAreasFlorestaisPorEstacao(estacaoAtual.getId());
+        ArrayList<AreaFlorestal> areasDisponiveis = obterAreasFlorestaisPorEstacao(estacaoAtual.getIdEstacao());
 
         if (areasDisponiveis.isEmpty()) {
             System.out.println("❌ Nenhuma área florestal cadastrada para esta estação.");
@@ -496,13 +497,13 @@ public class ForestGuardianNetwork {
 
     /**
      * Busca uma área florestal por ID na lista disponível
-     * @param id ID da área
+     * @param idArea ID da área
      * @param areasDisponiveis Lista de áreas disponíveis
      * @return AreaFlorestal encontrada ou null
      */
-    private static AreaFlorestal buscarAreaPorId(int id, ArrayList<AreaFlorestal> areasDisponiveis) {
+    private static AreaFlorestal buscarAreaPorId(int idArea, ArrayList<AreaFlorestal> areasDisponiveis) {
         for (AreaFlorestal area : areasDisponiveis) {
-            if (area.getId() == id) {
+            if (area.getIdArea() == idArea) {
                 return area;
             }
         }
@@ -511,12 +512,12 @@ public class ForestGuardianNetwork {
 
     /**
      * Busca um sensor por ID
-     * @param id ID do sensor
+     * @param idSensor ID do sensor
      * @return Sensor encontrado ou null
      */
-    private static Sensor buscarSensorPorId(int id) {
+    private static Sensor buscarSensorPorId(int idSensor) {
         for (Sensor sensor : sensores) {
-            if (sensor.getId() == id) {
+            if (sensor.getIdSensor() == idSensor) {
                 return sensor;
             }
         }
