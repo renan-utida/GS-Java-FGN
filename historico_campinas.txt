@@ -3,23 +3,23 @@
 ═══════════════════════════════════════════════════════════════════════════
 🏢 1º Batalhão de Bombeiros de Campinas
 👮 Cap. Carlos Eduardo Silva
-📅 Gerado em: 02/06/2025 10:52:50
+📅 Gerado em: 02/06/2025 12:42:24
 
-📊 Total de registros: 3
+📊 Total de registros: 5
 
 🚨 #1 - INCÊNDIO
     📍 Floresta Estadual Serra D'Água
     🏢 Campinas, SP
-    ⚠️  Alerta Ativo | 📊 Ativo | ⏰ 02/06/2025 10:52
+    ⚠️  Alerta Ativo | 📊 Ativo | ⏰ 02/06/2025 12:42
     🔥 60 hectares afetados
-    🔍 Sensor Térmico FGN-T01
+    🔍 Drone de varredura
     🚁 FGN-Hawk Alpha (#101)
     👤 Denúncia: Drone
 
 ✅ #2 - ÁREA SEGURA
     📍 Estação Ecológica de Valinhos
     🏢 Campinas, SP
-    ⚠️  Seguro | 📊 Concluído | ⏰ 02/06/2025 10:52
+    ⚠️  Seguro | 📊 Concluído | ⏰ 02/06/2025 12:42
     🔍 Drone de varredura
     🚁 FGN-Hawk Alpha (#101)
     👤 Denúncia: Drone
@@ -27,12 +27,29 @@
 🚨 #3 - INCÊNDIO
     📍 Serra das Cabras
     🏢 Campinas, SP
-    ⚠️  Alerta Ativo | 📊 Ativo | ⏰ 02/06/2025 10:52
+    ⚠️  Alerta Ativo | 📊 Ativo | ⏰ 02/06/2025 12:42
     🔥 70 hectares afetados
     🔍 Drone de varredura
     🚁 FGN-Hawk Alpha (#101)
     👤 Denúncia: Gustavo
         📄 CPF: 11111111111 | 📅 Nascimento: 11/01/2001
+
+🚨 #4 - INCÊNDIO
+    📍 Floresta Estadual Serra D'Água
+    🏢 Campinas, SP
+    ⚠️  Investigação | 📊 Ativo | ⏰ 02/06/2025 12:42
+    🔥 20 hectares afetados
+    🔍 Drone de varredura
+    🚁 FGN-Hawk Alpha (#101)
+    👤 Denúncia: Drone
+
+✅ #5 - ÁREA SEGURA
+    📍 Serra das Cabras
+    🏢 Campinas, SP
+    ⚠️  Seguro | 📊 Concluído | ⏰ 02/06/2025 12:42
+    🔍 Drone de varredura
+    🚁 FGN-Hawk Alpha (#101)
+    👤 Denúncia: Drone
 
 ═══════════════════════════════════════════════════════════════════════════
 🌲 Forest Guardian Network - Campinas 🌲

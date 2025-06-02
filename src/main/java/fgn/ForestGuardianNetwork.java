@@ -181,15 +181,27 @@ public class ForestGuardianNetwork {
                     System.out.println("✅ Login realizado com sucesso!");
                     System.out.println("🏢 Bem-vindo à " + estacaoAtual.getNomeComandante() + "!");
                     System.out.println("📍 " + estacaoAtual.getNomeEstacao());
-                    int ocorrenciasCarregadas = Ocorrencia.carregarHistoricoDaCidade(ocorrencias, estacaoAtual, areasFlorestais, drones);
-                    if (ocorrenciasCarregadas > 0) {
-                        System.out.println("📁 Histórico carregado: " + ocorrenciasCarregadas + " ocorrência(s) anterior(es)");
+                    System.out.println();
 
-                        // Ajustar próximo ID para não duplicar
-                        proximoIdOcorrencia = calcularProximoId();
+                    // ✅ NOVO: Carregar histórico da cidade automaticamente
+                    System.out.println("🔄 Carregando histórico da estação...");
+                    Arquivo.carregarHistoricoDaCidade(estacaoAtual, ocorrencias, estacoes, areasFlorestais, drones);
+
+                    // ✅ NOVO: Ajustar próximo ID baseado nas ocorrências carregadas
+                    if (!ocorrencias.isEmpty()) {
+                        int maiorId = 0;
+                        for (Ocorrencia ocorrencia : ocorrencias) {
+                            if (ocorrencia.getIdOcorrencia() > maiorId) {
+                                maiorId = ocorrencia.getIdOcorrencia();
+                            }
+                        }
+                        proximoIdOcorrencia = maiorId + 1;
                     }
 
                     System.out.println();
+
+                    loginValido = true;
+
                 } else {
                     System.out.println("❌ ID inválido! Por favor, escolha um ID da lista acima.");
                     System.out.println();
@@ -215,20 +227,6 @@ public class ForestGuardianNetwork {
             }
         }
         return null;
-    }
-
-    /**
-     * Calcula o próximo ID de ocorrência baseado nos IDs já existentes
-     * @return Próximo ID disponível
-     */
-    private static int calcularProximoId() {
-        int maiorId = 0;
-        for (Ocorrencia ocorrencia : ocorrencias) {
-            if (ocorrencia.getIdOcorrencia() > maiorId) {
-                maiorId = ocorrencia.getIdOcorrencia();
-            }
-        }
-        return maiorId + 1;
     }
 
     /**
@@ -319,7 +317,7 @@ public class ForestGuardianNetwork {
 
                     case 2:
                         System.out.println();
-                        proximoIdOcorrencia = Ocorrencia.relatarDenunciaUsuario(
+                        proximoIdOcorrencia = Casos.relatarDenunciaUsuario(
                                 areasFlorestais, drones, ocorrencias,
                                 proximoIdOcorrencia, estacaoAtual, estacoes, scanner
                         );
@@ -328,7 +326,7 @@ public class ForestGuardianNetwork {
 
                     case 3:
                         System.out.println();
-                        Ocorrencia.listarOcorrenciasDaEstacao(ocorrencias, estacoes, estacaoAtual);
+                        Casos.listarOcorrenciasDaEstacao(ocorrencias, estacoes, estacaoAtual);
                         break;
 
                     case 4:
@@ -374,7 +372,7 @@ public class ForestGuardianNetwork {
                 switch (opcao) {
                     case 1:
                         System.out.println();
-                        proximoIdOcorrencia = Ocorrencia.registrarNovaOcorrencia(
+                        proximoIdOcorrencia = Casos.registrarNovaOcorrencia(
                                 areasFlorestais, sensores, drones, ocorrencias,
                                 proximoIdOcorrencia, estacaoAtual, estacoes, scanner
                         );
@@ -382,7 +380,7 @@ public class ForestGuardianNetwork {
 
                     case 2:
                         System.out.println();
-                        proximoIdOcorrencia = Ocorrencia.registrarAreaSegura(
+                        proximoIdOcorrencia = Casos.registrarAreaSegura(
                                 areasFlorestais, drones, ocorrencias,
                                 proximoIdOcorrencia, estacaoAtual, estacoes, scanner
                         );
