@@ -181,6 +181,14 @@ public class ForestGuardianNetwork {
                     System.out.println("✅ Login realizado com sucesso!");
                     System.out.println("🏢 Bem-vindo à " + estacaoAtual.getNomeComandante() + "!");
                     System.out.println("📍 " + estacaoAtual.getNomeEstacao());
+                    int ocorrenciasCarregadas = Ocorrencia.carregarHistoricoDaCidade(ocorrencias, estacaoAtual, areasFlorestais, drones);
+                    if (ocorrenciasCarregadas > 0) {
+                        System.out.println("📁 Histórico carregado: " + ocorrenciasCarregadas + " ocorrência(s) anterior(es)");
+
+                        // Ajustar próximo ID para não duplicar
+                        proximoIdOcorrencia = calcularProximoId();
+                    }
+
                     System.out.println();
                 } else {
                     System.out.println("❌ ID inválido! Por favor, escolha um ID da lista acima.");
@@ -207,6 +215,20 @@ public class ForestGuardianNetwork {
             }
         }
         return null;
+    }
+
+    /**
+     * Calcula o próximo ID de ocorrência baseado nos IDs já existentes
+     * @return Próximo ID disponível
+     */
+    private static int calcularProximoId() {
+        int maiorId = 0;
+        for (Ocorrencia ocorrencia : ocorrencias) {
+            if (ocorrencia.getIdOcorrencia() > maiorId) {
+                maiorId = ocorrencia.getIdOcorrencia();
+            }
+        }
+        return maiorId + 1;
     }
 
     /**
@@ -299,14 +321,14 @@ public class ForestGuardianNetwork {
                         System.out.println();
                         proximoIdOcorrencia = Ocorrencia.relatarDenunciaUsuario(
                                 areasFlorestais, drones, ocorrencias,
-                                proximoIdOcorrencia, estacaoAtual, scanner
+                                proximoIdOcorrencia, estacaoAtual, estacoes, scanner
                         );
                         System.out.println();
                         break;
 
                     case 3:
                         System.out.println();
-                        Ocorrencia.listarTodasOcorrencias(ocorrencias, estacoes);
+                        Ocorrencia.listarOcorrenciasDaEstacao(ocorrencias, estacoes, estacaoAtual);
                         break;
 
                     case 4:
@@ -354,7 +376,7 @@ public class ForestGuardianNetwork {
                         System.out.println();
                         proximoIdOcorrencia = Ocorrencia.registrarNovaOcorrencia(
                                 areasFlorestais, sensores, drones, ocorrencias,
-                                proximoIdOcorrencia, estacaoAtual, scanner
+                                proximoIdOcorrencia, estacaoAtual, estacoes, scanner
                         );
                         break;
 
@@ -362,7 +384,7 @@ public class ForestGuardianNetwork {
                         System.out.println();
                         proximoIdOcorrencia = Ocorrencia.registrarAreaSegura(
                                 areasFlorestais, drones, ocorrencias,
-                                proximoIdOcorrencia, estacaoAtual, scanner
+                                proximoIdOcorrencia, estacaoAtual, estacoes, scanner
                         );
                         break;
 

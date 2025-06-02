@@ -96,6 +96,26 @@ public class Ocorrencia {
     }
 
     /**
+     * Construtor para áreas seguras com usuário denunciante
+     * @param idOcorrencia Identificador único da ocorrência
+     * @param areaAfetada Área florestal averiguada
+     * @param droneVarredura Drone responsável pela varredura
+     * @param usuarioDenunciante Usuário que fez a denúncia
+     */
+    public Ocorrencia(int idOcorrencia, AreaFlorestal areaAfetada, Drone droneVarredura, Usuario usuarioDenunciante) {
+        this.idOcorrencia = idOcorrencia;
+        this.areaAfetada = areaAfetada;
+        this.hectaresAfetados = 0;
+        this.sensorDetector = null;
+        this.droneVarredura = droneVarredura;
+        this.tempoChegadaMinutos = 0;
+        this.dataHoraDeteccao = LocalDateTime.now();
+        this.statusOcorrencia = "Concluído";
+        this.nivelRisco = "Seguro";
+        this.usuarioDenunciante = usuarioDenunciante;
+    }
+
+    /**
      * Calcula o nível de risco baseado na área afetada
      * @param hectares Área afetada em hectares
      * @return String com o nível de risco
@@ -185,9 +205,10 @@ public class Ocorrencia {
         if (sensorDetector != null) {
             System.out.println("🔍 Detectado por: " + sensorDetector.getNomeSensor() + " (" + sensorDetector.getTipo() + ")");
         } else {
-            System.out.println("🔍 Detectado por: Nada detectado");
+            System.out.println("🔍 Detectado por: Drone de Varredura");
         }
 
+        System.out.println("🚁 Drone: " + droneVarredura.getModeloDrone() + " (#" + droneVarredura.getIdDrone() + ")");
         System.out.println("⏰ Data/Hora: " + dataHoraDeteccao.format(formatter));
 
         if (tempoChegadaMinutos > 0) {
@@ -243,7 +264,7 @@ public class Ocorrencia {
         if (sensorDetector != null) {
             System.out.println("    🔍 " + sensorDetector.getNomeSensor());
         } else {
-            System.out.println("    🔍 Nada detectado");
+            System.out.println("    🔍 Drone de Varredura");
         }
 
         if (droneVarredura != null) {
@@ -252,6 +273,9 @@ public class Ocorrencia {
 
         if (usuarioDenunciante != null) {
             System.out.println("    👤 Denúncia: " + usuarioDenunciante.getNome());
+            System.out.println("        📄 CPF: " + usuarioDenunciante.getCpf() + " | 📅 Nascimento: " + usuarioDenunciante.getDataNascimento());
+        } else {
+            System.out.println("    👤 Denúncia: Drone");
         }
 
         System.out.println();
@@ -265,12 +289,13 @@ public class Ocorrencia {
      * @param ocorrencias Lista de ocorrências
      * @param proximoIdOcorrencia Próximo ID disponível
      * @param estacaoAtual Estação logada
+     * @param estacoes Lista de todas as estações
      * @param scanner Scanner para entrada do usuário
      * @return Novo ID de ocorrência
      */
     public static int registrarNovaOcorrencia(ArrayList<AreaFlorestal> areasFlorestais, ArrayList<Sensor> sensores, ArrayList<Drone> drones,
                                               ArrayList<Ocorrencia> ocorrencias, int proximoIdOcorrencia,
-                                              EstacaoBombeiros estacaoAtual, Scanner scanner) {
+                                              EstacaoBombeiros estacaoAtual, ArrayList<EstacaoBombeiros> estacoes, Scanner scanner) {
         System.out.println("═══════════════════════════════════════════════════════════════════════════");
         System.out.println("🚨 REGISTRAR NOVA OCORRÊNCIA DE INCÊNDIO");
         System.out.println("═══════════════════════════════════════════════════════════════════════════");
@@ -360,6 +385,9 @@ public class Ocorrencia {
             System.out.println();
             novaOcorrencia.exibirRelatorio(estacaoAtual);
 
+            ArrayList<Ocorrencia> ocorrenciasDaEstacao = filtrarOcorrenciasPorEstacao(ocorrencias, estacaoAtual.getIdEstacao());
+            salvarHistoricoDaCidade(ocorrenciasDaEstacao, estacaoAtual);
+
             return proximoIdOcorrencia + 1;
 
         } catch (Exception e) {
@@ -376,12 +404,13 @@ public class Ocorrencia {
      * @param ocorrencias Lista de ocorrências
      * @param proximoIdOcorrencia Próximo ID disponível
      * @param estacaoAtual Estação logada
+     * @param estacoes Lista de todas as estações
      * @param scanner Scanner para entrada do usuário
      * @return Novo ID de ocorrência
      */
     public static int registrarAreaSegura(ArrayList<AreaFlorestal> areasFlorestais, ArrayList<Drone> drones,
                                           ArrayList<Ocorrencia> ocorrencias, int proximoIdOcorrencia,
-                                          EstacaoBombeiros estacaoAtual, Scanner scanner) {
+                                          EstacaoBombeiros estacaoAtual, ArrayList<EstacaoBombeiros> estacoes, Scanner scanner) {
         System.out.println("═══════════════════════════════════════════════════════════════════════════");
         System.out.println("✅ REGISTRAR ÁREA SEGURA");
         System.out.println("═══════════════════════════════════════════════════════════════════════════");
@@ -435,6 +464,9 @@ public class Ocorrencia {
             System.out.println();
             areaSegura.exibirRelatorio(estacaoAtual);
 
+            ArrayList<Ocorrencia> ocorrenciasDaEstacao = filtrarOcorrenciasPorEstacao(ocorrencias, estacaoAtual.getIdEstacao());
+            salvarHistoricoDaCidade(ocorrenciasDaEstacao, estacaoAtual);
+
             return proximoIdOcorrencia + 1;
 
         } catch (Exception e) {
@@ -451,32 +483,51 @@ public class Ocorrencia {
      * @param ocorrencias Lista de ocorrências
      * @param proximoIdOcorrencia Próximo ID disponível
      * @param estacaoAtual Estação logada
+     * @param estacoes Lista de todas as estações
      * @param scanner Scanner para entrada do usuário
      * @return Novo ID de ocorrência
      */
     public static int relatarDenunciaUsuario(ArrayList<AreaFlorestal> areasFlorestais, ArrayList<Drone> drones,
                                              ArrayList<Ocorrencia> ocorrencias, int proximoIdOcorrencia,
-                                             EstacaoBombeiros estacaoAtual, Scanner scanner) {
+                                             EstacaoBombeiros estacaoAtual, ArrayList<EstacaoBombeiros> estacoes, Scanner scanner) {
         System.out.println("═══════════════════════════════════════════════════════════════════════════");
         System.out.println("📱 RELATAR DENÚNCIA DE USUÁRIO");
         System.out.println("═══════════════════════════════════════════════════════════════════════════");
         System.out.println();
 
         try {
-            // 1. Coletar dados do usuário
+            // 1. Coletar dados do usuário com validaçãp
             System.out.println("👤 DADOS DO DENUNCIANTE:");
             System.out.println();
 
-            System.out.print("Nome completo: ");
-            String nome = scanner.nextLine();
+            String nome;
+            boolean nomeValido = false;
 
-            if (nome.trim().isEmpty()) {
-                System.out.println("❌ Nome não pode estar vazio!");
+            do {
+                System.out.print("Nome completo: ");
+                nome = scanner.nextLine();
+
+                if (!Usuario.validarNome(nome)) {
+                    System.out.println("❌ Nome inválido! Use apenas letras e espaços, começando por uma letra.");
+                    System.out.println("Retornando ao menu anterior...");
+                    return proximoIdOcorrencia;
+                }
+                nomeValido = true;
+            } while (!nomeValido);
+
+            // Formatar nome para exibição
+            nome = Usuario.formatarNome(nome);
+
+            long cpf;
+            String dataNascimento;
+
+            try {
+                cpf = Usuario.solicitarCPF(scanner);
+                dataNascimento = Usuario.solicitarDataNascimento(scanner);
+            } catch (Exception e) {
+                System.out.println("❌ Dados pessoais inválidos! Retornando ao menu anterior...");
                 return proximoIdOcorrencia;
             }
-
-            long cpf = Usuario.solicitarCPF(scanner);
-            String dataNascimento = Usuario.solicitarDataNascimento(scanner);
 
             Usuario usuario = new Usuario(nome, cpf, dataNascimento);
 
@@ -492,40 +543,68 @@ public class Ocorrencia {
                 return proximoIdOcorrencia;
             }
 
-            System.out.println("📍 Escolha o local onde ocorreu o possível incêndio:");
-            System.out.println();
+            AreaFlorestal areaSelecionada = null;
+            boolean areaValida = false;
 
-            for (AreaFlorestal area : areasDisponiveis) {
-                area.exibirInformacoes();
-            }
+            // Loop até escolher área válida
+            while (!areaValida) {
+                System.out.println("📍 Escolha o local onde ocorreu o possível incêndio:");
+                System.out.println();
 
-            System.out.print("👉 Escolha uma das opções: ");
+                for (AreaFlorestal area : areasDisponiveis) {
+                    area.exibirInformacoes();
+                }
 
-            int opcaoArea = scanner.nextInt();
-            scanner.nextLine(); // Limpa o buffer
+                System.out.print("👉 Escolha uma das opções: ");
 
-            AreaFlorestal areaSelecionada = buscarAreaPorId(opcaoArea, areasDisponiveis);
+                try {
+                    int opcaoArea = scanner.nextInt();
+                    scanner.nextLine(); // Limpa o buffer
 
-            if (areaSelecionada == null) {
-                System.out.println("❌ Opção inválida!");
-                return proximoIdOcorrencia;
+                    areaSelecionada = buscarAreaPorId(opcaoArea, areasDisponiveis);
+
+                    if (areaSelecionada != null) {
+                        areaValida = true;
+                    } else {
+                        System.out.println("❌ Opção inválida! Tente novamente.");
+                        System.out.println();
+                    }
+                } catch (Exception e) {
+                    System.out.println("❌ Digite apenas números! Tente novamente.");
+                    scanner.nextLine(); // Limpa o buffer
+                    System.out.println();
+                }
             }
 
             System.out.println();
 
             // 3. Perguntar sobre nível de risco percebido pelo usuário
-            System.out.println("⚠️  Qual o nível de risco que você percebe?");
-            System.out.println("1. Investigação (Pequeno foco, pouca fumaça)");
-            System.out.println("2. Alerta Ativo (Fogo visível, fumaça densa)");
-            System.out.println("3. Emergência (Fogo intenso, área extensa)");
-            System.out.print("👉 Escolha o nível de risco: ");
+            int nivelRisco = 0;
+            boolean riscoValido = false;
 
-            int nivelRisco = scanner.nextInt();
-            scanner.nextLine(); // Limpa o buffer
+            // Loop até escolher nível de risco válido
+            while (!riscoValido) {
+                System.out.println("⚠️  Qual o nível de risco que você percebe?");
+                System.out.println("1. Investigação (Pequeno foco, pouca fumaça)");
+                System.out.println("2. Alerta Ativo (Fogo visível, fumaça densa)");
+                System.out.println("3. Emergência (Fogo intenso, área extensa)");
+                System.out.print("👉 Escolha o nível de risco: ");
 
-            if (nivelRisco < 1 || nivelRisco > 3) {
-                System.out.println("❌ Opção inválida!");
-                return proximoIdOcorrencia;
+                try {
+                    nivelRisco = scanner.nextInt();
+                    scanner.nextLine(); // Limpa o buffer
+
+                    if (nivelRisco >= 1 && nivelRisco <= 3) {
+                        riscoValido = true;
+                    } else {
+                        System.out.println("❌ Opção inválida! Escolha entre 1, 2 ou 3.");
+                        System.out.println();
+                    }
+                } catch (Exception e) {
+                    System.out.println("❌ Digite apenas números! Tente novamente.");
+                    scanner.nextLine(); // Limpa o buffer
+                    System.out.println();
+                }
             }
 
             // 4. Selecionar drone para varredura
@@ -576,13 +655,15 @@ public class Ocorrencia {
                         tempoChegada
                 );
 
-                droneSelecionado.setStatusDrone("Em Missão");
                 ocorrencias.add(novaOcorrencia);
 
                 System.out.println();
                 System.out.println("🚨 DENÚNCIA CONFIRMADA! Registrando ocorrência...");
                 System.out.println();
                 novaOcorrencia.exibirRelatorio(estacaoAtual);
+
+                ArrayList<Ocorrencia> ocorrenciasDaEstacao = filtrarOcorrenciasPorEstacao(ocorrencias, estacaoAtual.getIdEstacao());
+                salvarHistoricoDaCidade(ocorrenciasDaEstacao, estacaoAtual);
 
             } else if ("N".equals(resposta) || "NÃO".equals(resposta) || "NAO".equals(resposta)) {
                 // 7b. Área não é verídica - perguntar hectares
@@ -620,11 +701,13 @@ public class Ocorrencia {
                     System.out.println("🚨 OCORRÊNCIA REGISTRADA COM DADOS CORRIGIDOS!");
                 }
 
-                droneSelecionado.setStatusDrone("Em Missão");
                 ocorrencias.add(ocorrencia);
 
                 System.out.println();
                 ocorrencia.exibirRelatorio(estacaoAtual);
+
+                ArrayList<Ocorrencia> ocorrenciasDaEstacao = filtrarOcorrenciasPorEstacao(ocorrencias, estacaoAtual.getIdEstacao());
+                salvarHistoricoDaCidade(ocorrenciasDaEstacao, estacaoAtual);
 
             } else {
                 System.out.println("❌ Resposta inválida! Digite S para Sim ou N para Não.");
@@ -641,34 +724,367 @@ public class Ocorrencia {
     }
 
     /**
-     * Lista todas as ocorrências registradas
+     * Lista todas as ocorrências de uma estação específica e salva no arquivo da cidade
      * @param ocorrencias Lista de ocorrências
      * @param estacoes Lista de estações
+     * @param estacaoAtual Estação logada atualmente
      */
-    public static void listarTodasOcorrencias(ArrayList<Ocorrencia> ocorrencias, ArrayList<EstacaoBombeiros> estacoes) {
+    public static void listarOcorrenciasDaEstacao(ArrayList<Ocorrencia> ocorrencias, ArrayList<EstacaoBombeiros> estacoes, EstacaoBombeiros estacaoAtual) {
         System.out.println("═══════════════════════════════════════════════════════════════════════════");
-        System.out.println("📋 TODAS AS OCORRÊNCIAS REGISTRADAS");
+        System.out.println("📋 OCORRÊNCIAS DE " + estacaoAtual.getCidade().toUpperCase());
         System.out.println("═══════════════════════════════════════════════════════════════════════════");
         System.out.println();
 
-        if (ocorrencias.isEmpty()) {
-            System.out.println("📭 Nenhuma ocorrência registrada ainda.");
+        // Filtrar ocorrências apenas da estação atual
+        ArrayList<Ocorrencia> ocorrenciasDaEstacao = new ArrayList<>();
+        for (Ocorrencia ocorrencia : ocorrencias) {
+            if (ocorrencia.getAreaAfetada().getIdEstacaoResponsavel() == estacaoAtual.getIdEstacao()) {
+                ocorrenciasDaEstacao.add(ocorrencia);
+            }
+        }
+
+        if (ocorrenciasDaEstacao.isEmpty()) {
+            System.out.println("📭 Nenhuma ocorrência registrada ainda em " + estacaoAtual.getCidade() + ".");
             System.out.println();
             return;
         }
 
-        System.out.println("Total de registros: " + ocorrencias.size());
+        System.out.println("Total de registros em " + estacaoAtual.getCidade() + ": " + ocorrenciasDaEstacao.size());
         System.out.println();
 
-        for (Ocorrencia ocorrencia : ocorrencias) {
-            EstacaoBombeiros estacaoResponsavel = buscarEstacaoPorId(ocorrencia.getAreaAfetada().getIdEstacaoResponsavel(), estacoes);
-            if (estacaoResponsavel != null) {
-                ocorrencia.exibirResumo(estacaoResponsavel);
-            }
+        for (Ocorrencia ocorrencia : ocorrenciasDaEstacao) {
+            ocorrencia.exibirResumo(estacaoAtual);
         }
 
         System.out.println("═══════════════════════════════════════════════════════════════════════════");
+
+        // ✅ NOVO: Salvar automaticamente no arquivo
+        salvarHistoricoDaCidade(ocorrenciasDaEstacao, estacaoAtual);
+        System.out.println("💾 Histórico salvo em 'historico_" + estacaoAtual.getCidade().toLowerCase().replace(" ", "_") + ".txt'");
+
         System.out.println();
+    }
+
+    /**
+     * Salva o histórico específico de uma cidade
+     * @param ocorrenciasDaEstacao Lista de ocorrências filtrada por estação
+     * @param estacaoAtual Estação atual logada
+     */
+    public static void salvarHistoricoDaCidade(ArrayList<Ocorrencia> ocorrenciasDaEstacao, EstacaoBombeiros estacaoAtual) {
+        try {
+            String nomeArquivo = "historico_" + estacaoAtual.getCidade().toLowerCase().replace(" ", "_") + ".txt";
+            java.io.FileWriter writer = new java.io.FileWriter(nomeArquivo);
+            java.io.PrintWriter printWriter = new java.io.PrintWriter(writer);
+
+            // Cabeçalho do arquivo específico da cidade
+            printWriter.println("═══════════════════════════════════════════════════════════════════════════");
+            printWriter.println("📋 HISTÓRICO DE OCORRÊNCIAS - " + estacaoAtual.getCidade().toUpperCase());
+            printWriter.println("═══════════════════════════════════════════════════════════════════════════");
+            printWriter.println("🏢 " + estacaoAtual.getNomeEstacao());
+            printWriter.println("👮 " + estacaoAtual.getNomeComandante());
+            printWriter.println("📅 Gerado em: " + java.time.LocalDateTime.now().format(java.time.format.DateTimeFormatter.ofPattern("dd/MM/yyyy HH:mm:ss")));
+            printWriter.println();
+
+            if (ocorrenciasDaEstacao.isEmpty()) {
+                printWriter.println("📭 Nenhuma ocorrência registrada ainda em " + estacaoAtual.getCidade() + ".");
+            } else {
+                printWriter.println("📊 Total de registros: " + ocorrenciasDaEstacao.size());
+                printWriter.println();
+
+                // Escrever cada ocorrência da estação
+                for (Ocorrencia ocorrencia : ocorrenciasDaEstacao) {
+                    String resumoFormatado = formatarResumoParaArquivo(ocorrencia, estacaoAtual);
+                    printWriter.print(resumoFormatado);
+                }
+            }
+
+            printWriter.println("═══════════════════════════════════════════════════════════════════════════");
+            printWriter.println("🌲 Forest Guardian Network - " + estacaoAtual.getCidade() + " 🌲");
+            printWriter.println("═══════════════════════════════════════════════════════════════════════════");
+
+            printWriter.close();
+
+        } catch (java.io.IOException e) {
+            System.out.println("❌ Erro ao salvar arquivo: " + e.getMessage());
+        }
+    }
+
+    /**
+     * Formata o resumo da ocorrência para salvar no arquivo
+     * @param ocorrencia Ocorrência a ser formatada
+     * @param estacaoResponsavel Estação responsável
+     * @return String formatada para arquivo
+     */
+    private static String formatarResumoParaArquivo(Ocorrencia ocorrencia, EstacaoBombeiros estacaoResponsavel) {
+        StringBuilder sb = new StringBuilder();
+        java.time.format.DateTimeFormatter formatter = java.time.format.DateTimeFormatter.ofPattern("dd/MM/yyyy HH:mm");
+
+        String emoji = "Seguro".equals(ocorrencia.getNivelRisco()) ? "✅" : "🚨";
+        String tipoOcorrencia = "Seguro".equals(ocorrencia.getNivelRisco()) ? "ÁREA SEGURA" : "INCÊNDIO";
+
+        sb.append(emoji).append(" #").append(ocorrencia.getIdOcorrencia()).append(" - ").append(tipoOcorrencia).append("\n");
+        sb.append("    📍 ").append(ocorrencia.getAreaAfetada().getNomeArea()).append("\n");
+        sb.append("    🏢 ").append(estacaoResponsavel.getCidade()).append(", ").append(estacaoResponsavel.getEstado()).append("\n");
+        sb.append("    ⚠️  ").append(ocorrencia.getNivelRisco()).append(" | 📊 ").append(ocorrencia.getStatusOcorrencia()).append(" | ⏰ ").append(ocorrencia.getDataHoraDeteccao().format(formatter)).append("\n");
+
+        if (ocorrencia.getHectaresAfetados() > 0) {
+            sb.append("    🔥 ").append(ocorrencia.getHectaresAfetados()).append(" hectares afetados").append("\n");
+        }
+
+        if (ocorrencia.getSensorDetector() != null) {
+            sb.append("    🔍 ").append(ocorrencia.getSensorDetector().getNomeSensor()).append("\n");
+        } else {
+            sb.append("    🔍 Drone de varredura").append("\n");
+        }
+
+        sb.append("    🚁 ").append(ocorrencia.getDroneVarredura().getModeloDrone()).append(" (#").append(ocorrencia.getDroneVarredura().getIdDrone()).append(")").append("\n");
+
+        if (ocorrencia.getUsuarioDenunciante() != null) {
+            sb.append("    👤 Denúncia: ").append(ocorrencia.getUsuarioDenunciante().getNome()).append("\n");
+            sb.append("        📄 CPF: ").append(ocorrencia.getUsuarioDenunciante().getCpf()).append(" | 📅 Nascimento: ").append(ocorrencia.getUsuarioDenunciante().getDataNascimento()).append("\n");
+        } else {
+            sb.append("    👤 Denúncia: Drone").append("\n");
+        }
+
+        sb.append("\n");
+        return sb.toString();
+    }
+
+    /**
+     * Carrega histórico de ocorrências do arquivo da cidade (se existir)
+     * e adiciona à lista de ocorrências em memória
+     * @param ocorrencias Lista de ocorrências em memória
+     * @param estacaoAtual Estação logada atualmente
+     * @param areasFlorestais Lista de áreas florestais
+     * @param drones Lista de drones
+     * @return Número de ocorrências carregadas
+     */
+    public static int carregarHistoricoDaCidade(ArrayList<Ocorrencia> ocorrencias, EstacaoBombeiros estacaoAtual,
+                                                ArrayList<AreaFlorestal> areasFlorestais, ArrayList<Drone> drones) {
+        try {
+            String nomeArquivo = "historico_" + estacaoAtual.getCidade().toLowerCase().replace(" ", "_") + ".txt";
+            java.io.File arquivo = new java.io.File(nomeArquivo);
+
+            if (!arquivo.exists()) {
+                return 0; // Arquivo não existe, primeira vez na cidade
+            }
+
+            java.io.BufferedReader reader = new java.io.BufferedReader(new java.io.FileReader(arquivo));
+            String linha;
+            int ocorrenciasCarregadas = 0;
+
+            // Variáveis para reconstruir ocorrência
+            Integer idOcorrencia = null;
+            String nomeArea = null;
+            String nivelRisco = null;
+            String status = null;
+            String dataHora = null;
+            Integer hectares = null;
+            String sensor = null;
+            String dronePesquisa = null;
+            String denunciante = null;
+            String cpfDenunciante = null;
+            String nascimentoDenunciante = null;
+
+            while ((linha = reader.readLine()) != null) {
+                linha = linha.trim();
+
+                // Detectar início de nova ocorrência
+                if (linha.startsWith("🚨 #") || linha.startsWith("✅ #")) {
+                    // Se já temos dados de uma ocorrência anterior, criar ela
+                    if (idOcorrencia != null && nomeArea != null) {
+                        Ocorrencia ocorrenciaReconstruida = reconstruirOcorrencia(
+                                idOcorrencia, nomeArea, nivelRisco, status, dataHora, hectares,
+                                sensor, dronePesquisa, denunciante, cpfDenunciante, nascimentoDenunciante,
+                                areasFlorestais, drones, estacaoAtual
+                        );
+
+                        if (ocorrenciaReconstruida != null) {
+                            // Verificar se já existe na memória (evitar duplicatas)
+                            boolean jaExiste = false;
+                            for (Ocorrencia existente : ocorrencias) {
+                                if (existente.getIdOcorrencia() == idOcorrencia) {
+                                    jaExiste = true;
+                                    break;
+                                }
+                            }
+
+                            if (!jaExiste) {
+                                ocorrencias.add(ocorrenciaReconstruida);
+                                ocorrenciasCarregadas++;
+                            }
+                        }
+                    }
+
+                    // Resetar variáveis para nova ocorrência
+                    idOcorrencia = null; nomeArea = null; nivelRisco = null; status = null;
+                    dataHora = null; hectares = null; sensor = null; dronePesquisa = null;
+                    denunciante = null; cpfDenunciante = null; nascimentoDenunciante = null;
+
+                    // Extrair ID da ocorrência
+                    try {
+                        String idParte = linha.substring(linha.indexOf("#") + 1);
+                        if (idParte.contains(" ")) {
+                            idParte = idParte.substring(0, idParte.indexOf(" "));
+                        }
+                        idOcorrencia = Integer.parseInt(idParte.trim());
+                    } catch (Exception e) {
+                        // Ignorar linha malformada
+                        continue;
+                    }
+                }
+                // Extrair dados da ocorrência
+                else if (linha.startsWith("    📍 ")) {
+                    nomeArea = linha.substring(7).trim();
+                }
+                else if (linha.contains("⚠️") && linha.contains("|") && linha.contains("📊")) {
+                    String[] dados = linha.split("\\|");
+                    if (dados.length >= 3) {
+                        nivelRisco = dados[0].substring(dados[0].indexOf("⚠️") + 2).trim();
+                        status = dados[1].substring(dados[1].indexOf("📊") + 2).trim();
+                        dataHora = dados[2].substring(dados[2].indexOf("⏰") + 2).trim();
+                    }
+                }
+                else if (linha.startsWith("    🔥 ")) {
+                    String hectaresStr = linha.substring(7).split(" ")[0];
+                    try {
+                        hectares = Integer.parseInt(hectaresStr);
+                    } catch (NumberFormatException e) {
+                        hectares = 0;
+                    }
+                }
+                else if (linha.startsWith("    🔍 ")) {
+                    sensor = linha.substring(7).trim();
+                }
+                else if (linha.startsWith("    🚁 ")) {
+                    dronePesquisa = linha.substring(7).trim();
+                }
+                else if (linha.startsWith("    👤 Denúncia: ")) {
+                    denunciante = linha.substring(16).trim();
+                }
+                else if (linha.contains("📄 CPF:") && linha.contains("📅 Nascimento:")) {
+                    try {
+                        String cpfParte = linha.substring(linha.indexOf("CPF:") + 4);
+                        if (cpfParte.contains("|")) {
+                            cpfParte = cpfParte.substring(0, cpfParte.indexOf("|"));
+                        }
+                        cpfDenunciante = cpfParte.trim();
+
+                        String nascParte = linha.substring(linha.indexOf("Nascimento:") + 11);
+                        nascimentoDenunciante = nascParte.trim();
+                    } catch (Exception e) {
+                        // Ignorar linha malformada
+                    }
+                }
+            }
+
+            // Processar última ocorrência se houver
+            if (idOcorrencia != null && nomeArea != null) {
+                Ocorrencia ocorrenciaReconstruida = reconstruirOcorrencia(
+                        idOcorrencia, nomeArea, nivelRisco, status, dataHora, hectares,
+                        sensor, dronePesquisa, denunciante, cpfDenunciante, nascimentoDenunciante,
+                        areasFlorestais, drones, estacaoAtual
+                );
+
+                if (ocorrenciaReconstruida != null) {
+                    boolean jaExiste = false;
+                    for (Ocorrencia existente : ocorrencias) {
+                        if (existente.getIdOcorrencia() == idOcorrencia) {
+                            jaExiste = true;
+                            break;
+                        }
+                    }
+
+                    if (!jaExiste) {
+                        ocorrencias.add(ocorrenciaReconstruida);
+                        ocorrenciasCarregadas++;
+                    }
+                }
+            }
+
+            reader.close();
+            return ocorrenciasCarregadas;
+
+        } catch (Exception e) {
+            System.out.println("⚠️ Aviso: Não foi possível carregar histórico anterior (" + e.getMessage() + ")");
+            return 0;
+        }
+    }
+
+    /**
+     * Reconstrói uma ocorrência a partir dos dados extraídos do arquivo
+     */
+    private static Ocorrencia reconstruirOcorrencia(Integer idOcorrencia, String nomeArea, String nivelRisco,
+                                                    String status, String dataHora, Integer hectares, String sensor,
+                                                    String dronePesquisa, String denunciante, String cpfDenunciante,
+                                                    String nascimentoDenunciante, ArrayList<AreaFlorestal> areasFlorestais,
+                                                    ArrayList<Drone> drones, EstacaoBombeiros estacaoAtual) {
+        try {
+            // Encontrar área florestal
+            AreaFlorestal area = null;
+            for (AreaFlorestal af : areasFlorestais) {
+                if (af.getNomeArea().equals(nomeArea) && af.getIdEstacaoResponsavel() == estacaoAtual.getIdEstacao()) {
+                    area = af;
+                    break;
+                }
+            }
+
+            if (area == null) {
+                return null; // Área não encontrada
+            }
+
+            // Encontrar drone
+            Drone drone = obterDroneDaEstacao(drones, estacaoAtual.getIdEstacao());
+            if (drone == null) {
+                return null; // Drone não encontrado
+            }
+
+            // Encontrar sensor (se não for drone de varredura)
+            Sensor sensorObj = null;
+            if (sensor != null && !sensor.equals("Drone de varredura")) {
+                // Criar sensor baseado no nome (simplificado)
+                if (sensor.contains("Térmico")) {
+                    sensorObj = new Sensor(10, sensor, "Térmico");
+                } else if (sensor.contains("Fumaça")) {
+                    sensorObj = new Sensor(20, sensor, "Fumaça");
+                } else if (sensor.contains("Químico")) {
+                    sensorObj = new Sensor(30, sensor, "Químico");
+                }
+            }
+
+            // Criar usuário denunciante (se houver)
+            Usuario usuario = null;
+            if (denunciante != null && !denunciante.equals("Drone") && cpfDenunciante != null && nascimentoDenunciante != null) {
+                try {
+                    long cpf = Long.parseLong(cpfDenunciante);
+                    usuario = new Usuario(denunciante, cpf, nascimentoDenunciante);
+                } catch (NumberFormatException e) {
+                    // CPF inválido, ignorar usuário
+                }
+            }
+
+            // Criar ocorrência
+            int hectaresInt = (hectares != null) ? hectares : 0;
+
+            Ocorrencia ocorrencia;
+            if (hectaresInt == 0) {
+                // Área segura
+                ocorrencia = new Ocorrencia(idOcorrencia, area, drone, usuario);
+            } else {
+                // Ocorrência com hectares
+                int tempoChegada = calcularTempoChegada(area.getDistanciaKm(), 75);
+                if (usuario != null) {
+                    ocorrencia = new Ocorrencia(idOcorrencia, area, hectaresInt, drone, usuario, tempoChegada);
+                } else {
+                    ocorrencia = new Ocorrencia(idOcorrencia, area, hectaresInt, sensorObj, drone, tempoChegada);
+                }
+            }
+
+            return ocorrencia;
+
+        } catch (Exception e) {
+            return null; // Erro na reconstrução
+        }
     }
 
     /**
@@ -684,6 +1100,22 @@ public class Ocorrencia {
             }
         }
         return null;
+    }
+
+    /**
+     * Filtra ocorrências de uma estação específica
+     * @param ocorrencias Lista completa de ocorrências
+     * @param idEstacao ID da estação a filtrar
+     * @return Lista filtrada apenas da estação
+     */
+    private static ArrayList<Ocorrencia> filtrarOcorrenciasPorEstacao(ArrayList<Ocorrencia> ocorrencias, int idEstacao) {
+        ArrayList<Ocorrencia> ocorrenciasFiltradas = new ArrayList<>();
+        for (Ocorrencia ocorrencia : ocorrencias) {
+            if (ocorrencia.getAreaAfetada().getIdEstacaoResponsavel() == idEstacao) {
+                ocorrenciasFiltradas.add(ocorrencia);
+            }
+        }
+        return ocorrenciasFiltradas;
     }
 
     // Métodos auxiliares privados

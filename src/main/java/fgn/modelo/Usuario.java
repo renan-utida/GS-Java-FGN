@@ -40,6 +40,61 @@ public class Usuario {
     }
 
     /**
+     * Valida se o nome contém apenas letras e espaços, começando por letra
+     * @param nome Nome a ser validado
+     * @return true se válido, false caso contrário
+     */
+    public static boolean validarNome(String nome) {
+        if (nome == null || nome.trim().isEmpty()) {
+            return false;
+        }
+
+        nome = nome.trim();
+
+        // Deve começar com letra
+        if (!Character.isLetter(nome.charAt(0))) {
+            return false;
+        }
+
+        // Deve conter apenas letras e espaços
+        for (char c : nome.toCharArray()) {
+            if (!Character.isLetter(c) && c != ' ') {
+                return false;
+            }
+        }
+
+        return true;
+    }
+
+    /**
+     * Formata o nome para exibição (primeira letra maiúscula)
+     * @param nome Nome a ser formatado
+     * @return Nome formatado
+     */
+    public static String formatarNome(String nome) {
+        if (nome == null || nome.trim().isEmpty()) {
+            return nome;
+        }
+
+        String[] palavras = nome.trim().toLowerCase().split("\\s+");
+        StringBuilder nomeFormatado = new StringBuilder();
+
+        for (int i = 0; i < palavras.length; i++) {
+            if (i > 0) {
+                nomeFormatado.append(" ");
+            }
+            if (palavras[i].length() > 0) {
+                nomeFormatado.append(Character.toUpperCase(palavras[i].charAt(0)));
+                if (palavras[i].length() > 1) {
+                    nomeFormatado.append(palavras[i].substring(1));
+                }
+            }
+        }
+
+        return nomeFormatado.toString();
+    }
+
+    /**
      * Valida CPF (formato básico: 11 dígitos)
      */
     public static boolean validarCPF(long cpf) {
