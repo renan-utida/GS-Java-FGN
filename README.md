@@ -134,8 +134,7 @@ O **Forest Guardian Network** é um sistema abrangente de proteção florestal q
 
 ### Diagrama de Classes
 
-**Link Drawio:**
-[Diagrama de Classes FGN](https://drive.google.com/file/d/1vdMk7trNlFQTzP1XrIEqBoOBqSpTwaxU/view?usp=sharing)
+[**Diagrama de Classes FGN**](https://drive.google.com/file/d/1vdMk7trNlFQTzP1XrIEqBoOBqSpTwaxU/view?usp=sharing)
 
 ### 🎨 Padrões de Design Implementados
 
