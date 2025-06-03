@@ -20,8 +20,17 @@ import java.util.Scanner;
  * @version 1.0
  */
 public class Usuario {
+    /**
+     * Nome completo do usuário, preferencialmente formatado
+     */
     private String nome;
+    /**
+     * Documento CPF em formato numérico (11 dígitos)
+     */
     private long cpf;
+    /**
+     * Data de Nascimento no formato dd/MM/yyyy validada
+     */
     private String dataNascimento;
 
     /**

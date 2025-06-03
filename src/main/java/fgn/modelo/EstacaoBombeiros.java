@@ -18,12 +18,33 @@ package fgn.modelo;
  * @version 1.0
  */
 public class EstacaoBombeiros {
+    /**
+     * Identificador único da estação (4 dígitos padrão)
+     */
     private int idEstacao;
+    /**
+     * Denominação oficial da unidade operacional
+     */
     private String nomeEstacao;
+    /**
+     * Endereço completo da sede da estação
+     */
     private String endereco;
+    /**
+     * Município onde está localizada a estação
+     */
     private String cidade;
+    /**
+     * Unidade federativa da localização
+     */
     private String estado;
+    /**
+     * Nome completo do oficial responsável pela estação
+     */
     private String nomeComandante;
+    /**
+     * Identificação funcional do comandante (5 dígitos padrão)
+     */
     private int idComandante;
 
     /**

@@ -18,10 +18,25 @@ package fgn.modelo;
  * @version 1.0
  */
 public class AreaFlorestal {
+    /**
+    * Identificador único sequencial da área florestal
+    */
     private int idArea;
+    /**
+     * Denominação oficial ou popular da área florestal
+     */
     private String nomeArea;
+    /**
+     * Descrição detalhada da localização geográfica
+     */
     private String localizacao;
+    /**
+     * Distância em quilômetros da estação de bombeiros responsável
+     */
     private int distanciaKm;
+    /**
+     * ID da estação de bombeiros com jurisdição sobre a área
+     */
     private int idEstacaoResponsavel;
 
     /**

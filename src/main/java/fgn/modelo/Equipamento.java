@@ -18,8 +18,17 @@ package fgn.modelo;
  * @version 1.0
  */
 public abstract class Equipamento {
+    /**
+     * Identificador único numérico do equipamento no sistema
+     */
     protected int id;
+    /**
+     * Denominação específica ou modelo do equipamento
+     */
     protected String nome;
+    /**
+     * Classificação categórica do equipamento para organização
+     */
     protected String tipo;
 
     /**

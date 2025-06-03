@@ -19,6 +19,9 @@ package fgn.modelo;
  * @version 1.0
  */
 public class Drone extends Equipamento {
+    /**
+     * ID da estação de bombeiros proprietária do drone
+     */
     private int idEstacaoResponsavel;
 
     /**

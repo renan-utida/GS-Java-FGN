@@ -21,15 +21,45 @@ import java.time.format.DateTimeFormatter;
  * @version 1.0
  */
 public class Ocorrencia {
+    /**
+     * Identificador único sequencial da ocorrência
+     */
     private int idOcorrencia;
+    /**
+     * Área florestal onde foi detectado o incêndio
+     */
     private AreaFlorestal areaAfetada;
+    /**
+     * Extensão em hectares da área impactada
+     */
     private int hectaresAfetados;
+    /**
+     * Nível de risco calculado da ocorrência através da quantidade de hectares
+     */
     private String nivelRisco;
+    /**
+     * Sensor responsável pela detecção inicial
+     */
     private Sensor sensorDetector;
+    /**
+     * Drone utilizado para confirmação e varredura
+     */
     private Drone droneVarredura;
+    /**
+     * Obtém timestamp completo de quando a ocorrência foi detectada.
+     */
     private LocalDateTime dataHoraDeteccao;
+    /**
+     * Tempo estimado em minutos para chegada dos bombeiros
+     */
     private int tempoChegadaMinutos;
+    /**
+     * Identifica o Status da Ocorrencia como Ativo ou Concluido
+     */
     private String statusOcorrencia;
+    /**
+     * Cidadão que reportou a possível ocorrência
+     */
     private Usuario usuarioDenunciante;
 
     /**
