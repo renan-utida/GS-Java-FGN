@@ -4,25 +4,38 @@ import java.util.ArrayList;
 import java.util.Scanner;
 
 /**
- * Classe responsável pelas operações de varredura aérea com drones
- * Organiza e gerencia todas as funcionalidades relacionadas a drones e varreduras
+ * <p>
+ * Esta classe é responsável por organizar e gerenciar todas as operações de varredura aérea
+ * realizadas pelos drones do sistema Forest Guardian Network. Atua como um coordenador
+ * central para funcionalidades relacionadas ao gerenciamento de drones e execução de
+ * missões de monitoramento florestal.
+ * </p>
+ * <p>
+ * A classe delega operações específicas para outras classes especializadas (como Casos)
+ * mantendo uma interface organizada e simplificada para o usuário. Gerencia o fluxo
+ * principal de varreduras, desde a seleção de áreas até o registro de resultados.
+ * </p>
  *
- * @author Equipe FGN
+ * @author Renan Dias Utida, Fernanda Rocha Menon e Luiza Macena Dantas
  * @version 1.0
  */
 public class Varredura {
 
     /**
-     * Gerencia as operações relacionadas aos drones
-     * @param areasFlorestais Lista de áreas florestais
-     * @param sensores Lista de sensores
-     * @param drones Lista de drones
-     * @param ocorrencias Lista de ocorrências
-     * @param proximoIdOcorrencia Próximo ID disponível
-     * @param estacaoAtual Estação logada
-     * @param estacoes Lista de todas as estações
-     * @param scanner Scanner para entrada do usuário
-     * @return Novo próximo ID de ocorrência
+     * Gerencia todas as operações relacionadas aos drones da estação atual.
+     * Oferece menu completo para varredura de áreas, processamento de denúncias
+     * de usuários e listagem de ocorrências. Coordena o fluxo principal das
+     * atividades de monitoramento aéreo.
+     *
+     * @param areasFlorestais lista de áreas florestais disponíveis para varredura
+     * @param sensores lista de sensores disponíveis para equipar os drones
+     * @param drones lista de drones disponíveis na estação
+     * @param ocorrencias lista de ocorrências registradas no sistema
+     * @param proximoIdOcorrencia próximo ID disponível para novas ocorrências
+     * @param estacaoAtual estação de bombeiros atualmente logada
+     * @param estacoes lista completa de estações para referência
+     * @param scanner objeto Scanner para captura de entrada do usuário
+     * @return ID atualizado para próxima ocorrência após operações realizadas
      */
     public static int gerenciarDrones(ArrayList<AreaFlorestal> areasFlorestais, ArrayList<Sensor> sensores,
                                       ArrayList<Drone> drones, ArrayList<Ocorrencia> ocorrencias,
@@ -90,16 +103,19 @@ public class Varredura {
     }
 
     /**
-     * Inicia o processo de varredura de área florestal
-     * @param areasFlorestais Lista de áreas florestais
-     * @param sensores Lista de sensores
-     * @param drones Lista de drones
-     * @param ocorrencias Lista de ocorrências
-     * @param proximoIdOcorrencia Próximo ID disponível
-     * @param estacaoAtual Estação logada
-     * @param estacoes Lista de todas as estações
-     * @param scanner Scanner para entrada do usuário
-     * @return Novo próximo ID de ocorrência
+     * Inicia processo especializado de varredura de área florestal por drones.
+     * Oferece opções para registrar novas ocorrências de incêndio ou confirmar
+     * áreas seguras após varredura. Delega operações específicas para a classe Casos.
+     *
+     * @param areasFlorestais lista de áreas florestais disponíveis para varredura
+     * @param sensores lista de sensores disponíveis para detecção
+     * @param drones lista de drones disponíveis para a missão
+     * @param ocorrencias lista de ocorrências registradas no sistema
+     * @param proximoIdOcorrencia próximo ID disponível para novas ocorrências
+     * @param estacaoAtual estação de bombeiros executando a varredura
+     * @param estacoes lista completa de estações para referência
+     * @param scanner objeto Scanner para captura de entrada do usuário
+     * @return ID atualizado para próxima ocorrência após varredura realizada
      */
     public static int iniciarVarredura(ArrayList<AreaFlorestal> areasFlorestais, ArrayList<Sensor> sensores,
                                        ArrayList<Drone> drones, ArrayList<Ocorrencia> ocorrencias,

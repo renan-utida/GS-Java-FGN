@@ -6,21 +6,62 @@ import java.util.ArrayList;
 import java.util.Scanner;
 
 /**
- * Classe principal do Sistema Forest Guardian Network
- * Responsável pela interface com o usuário e fluxo principal
+ * <p>
+ * Esta classe representa o sistema principal do Forest Guardian Network (FGN),
+ * um sistema inteligente de prevenção e combate a queimadas florestais que
+ * integra drones, estações de bombeiros, áreas florestais e monitoramento em tempo real.
+ * </p>
+ * <p>
+ * O sistema permite login por estação de bombeiros, gerenciamento de drones para varredura,
+ * registro de ocorrências de incêndio, denúncias de usuários e geração de relatórios
+ * estatísticos. Funciona como um hub central para coordenação de esforços de combate
+ * a queimadas florestais.
+ * </p>
  *
- * @author Equipe FGN
+ * @author Renan Dias Utida, Fernanda Rocha Menon e Luiza Macena Dantas
  * @version 1.0
  */
 public class ForestGuardianNetwork {
+    /**
+     * Lista de estações de bombeiros cadastradas no sistema.
+     */
     private static ArrayList<EstacaoBombeiros> estacoes;
+
+    /**
+     * Lista de áreas florestais monitoradas pelo sistema.
+     */
     private static ArrayList<AreaFlorestal> areasFlorestais;
+
+    /**
+     * Lista de sensores disponíveis para equipar os drones.
+     */
     private static ArrayList<Sensor> sensores;
+
+    /**
+     * Lista de todas as ocorrências registradas no sistema.
+     */
     private static ArrayList<Ocorrencia> ocorrencias;
+
+    /**
+     * Lista de drones disponíveis para varredura e monitoramento.
+     */
     private static ArrayList<Drone> drones;
+
+    /**
+     * Scanner para captura de entrada do usuário.
+     */
     private static Scanner scanner;
+
+    /**
+     * Estação de bombeiros atualmente logada no sistema.
+     */
     private static EstacaoBombeiros estacaoAtual;
+
+    /**
+     * Próximo ID disponível para criação de novas ocorrências.
+     */
     private static int proximoIdOcorrencia = 1;
+
 
     public static void main(String[] args) {
         scanner = new Scanner(System.in);
@@ -38,7 +79,9 @@ public class ForestGuardianNetwork {
     }
 
     /**
-     * Inicializa as estações de bombeiros do sistema
+     * Inicializa as estações de bombeiros do sistema com dados pré-definidos.
+     * Cria estações nas cidades de Campinas, Piracicaba, Limeira e Mogi Mirim
+     * com seus respectivos comandantes e informações de localização.
      */
     private static void inicializarEstacoes() {
         estacoes = new ArrayList<>();
@@ -85,7 +128,9 @@ public class ForestGuardianNetwork {
     }
 
     /**
-     * Inicializa as áreas florestais próximas a cada estação
+     * Inicializa as áreas florestais próximas a cada estação de bombeiros.
+     * Cada estação possui 3 áreas florestais específicas em sua região,
+     * incluindo parques, APAs, estações ecológicas e reservas biológicas.
      */
     private static void inicializarAreasFlorestais() {
         areasFlorestais = new ArrayList<>();
@@ -112,7 +157,9 @@ public class ForestGuardianNetwork {
     }
 
     /**
-     * Inicializa os sensores disponíveis no sistema
+     * Inicializa os sensores especializados disponíveis no sistema.
+     * Cria sensores térmicos, de fumaça e químicos que podem ser
+     * acoplados aos drones para detecção de focos de incêndio.
      */
     private static void inicializarSensores() {
         sensores = new ArrayList<>();
@@ -123,7 +170,9 @@ public class ForestGuardianNetwork {
     }
 
     /**
-     * Inicializa os drones do sistema - 1 drone por estação
+     * Inicializa a frota de drones do sistema, atribuindo um drone
+     * especializado para cada estação de bombeiros cadastrada.
+     * Cada drone possui identificação única e nome operacional.
      */
     private static void inicializarDrones() {
         drones = new ArrayList<>();
@@ -137,7 +186,8 @@ public class ForestGuardianNetwork {
     }
 
     /**
-     * Exibe a tela inicial do sistema com logo e título
+     * Exibe a tela inicial do sistema com logo e identificação
+     * visual do Forest Guardian Network para apresentação ao usuário.
      */
     private static void exibirTelaInicial() {
         System.out.println("🌲🌲🌲🌲🌲🌲🌲🌲🌲🌲🌲🌲🌲🌲🌲🌲🌲🌲🌲🌲🌲🌲🌲🌲🌲🌲🌲🌲🌲🌲🌲🌲");
@@ -148,7 +198,9 @@ public class ForestGuardianNetwork {
     }
 
     /**
-     * Lista todas as estações de bombeiros disponíveis
+     * Lista todas as estações de bombeiros disponíveis no sistema,
+     * exibindo suas informações principais para seleção do usuário
+     * durante o processo de login.
      */
     private static void exibirEstacoesDisponiveis() {
         System.out.println("📍 ESTAÇÕES DE BOMBEIROS CADASTRADAS:");
@@ -160,8 +212,10 @@ public class ForestGuardianNetwork {
     }
 
     /**
-     * Realiza o processo de login do usuário
-     * Valida se o ID da estação informado existe
+     * Realiza o processo de autenticação do usuário no sistema.
+     * Valida o ID da estação informado, carrega histórico de ocorrências
+     * da cidade e ajusta o controle de IDs para novas ocorrências.
+     * Continua solicitando entrada até um login válido ser fornecido.
      */
     private static void realizarLogin() {
         boolean loginValido = false;
@@ -212,8 +266,9 @@ public class ForestGuardianNetwork {
     }
 
     /**
-     * Busca uma estação pelo ID informado
-     * @param idEstacao ID da estação a ser buscada
+     * Busca uma estação de bombeiros pelo ID informado.
+     *
+     * @param idEstacao ID da estação a ser localizada
      * @return EstacaoBombeiros encontrada ou null se não existir
      */
     private static EstacaoBombeiros buscarEstacaoPorId(int idEstacao) {
@@ -226,7 +281,10 @@ public class ForestGuardianNetwork {
     }
 
     /**
-     * Exibe o menu principal do sistema
+     * Exibe o menu principal do sistema e gerencia a navegação entre
+     * as funcionalidades principais: gerenciamento de drones, monitoramento
+     * de alertas, relatórios estatísticos e saída do sistema.
+     * Mantém loop ativo até o usuário escolher sair.
      */
     private static void exibirMenuPrincipal() {
         boolean sistemaAtivo = true;
@@ -290,125 +348,9 @@ public class ForestGuardianNetwork {
     }
 
     /**
-     * Gerencia as operações relacionadas aos drones
-     */
-    private static void gerenciarDrones() {
-        boolean voltarMenu = false;
-
-        while (!voltarMenu) {
-            System.out.println("═══════════════════════════════════════════════════════════════════════════");
-            System.out.println("🚁 GERENCIAR DRONES - " + estacaoAtual.getNomeComandante());
-            System.out.println("═══════════════════════════════════════════════════════════════════════════");
-            System.out.println("Escolha uma das opções abaixo:");
-            System.out.println("1.  🔍 Iniciar Varredura de Área Florestal");
-            System.out.println("2.  📱 Relatar Denúncia de Usuário");
-            System.out.println("3.  📋 Listar Todas as Ocorrências");
-            System.out.println("4.  🔙 Voltar");
-            System.out.print("👉 Digite sua opção: ");
-
-            try {
-                int opcao = scanner.nextInt();
-                scanner.nextLine(); // Limpa o buffer
-
-                switch (opcao) {
-                    case 1:
-                        System.out.println();
-                        iniciarVarredura();
-                        break;
-
-                    case 2:
-                        System.out.println();
-                        proximoIdOcorrencia = Casos.relatarDenunciaUsuario(
-                                areasFlorestais, drones, ocorrencias,
-                                proximoIdOcorrencia, estacaoAtual, estacoes, scanner
-                        );
-                        System.out.println();
-                        break;
-
-                    case 3:
-                        System.out.println();
-                        Casos.listarOcorrenciasDaEstacao(ocorrencias, estacoes, estacaoAtual);
-                        break;
-
-                    case 4:
-                        voltarMenu = true;
-                        break;
-
-                    default:
-                        System.out.println();
-                        System.out.println("❌ Opção inválida! Por favor, escolha uma opção de 1 a 4.");
-                        System.out.println();
-                        break;
-                }
-
-            } catch (Exception e) {
-                System.out.println();
-                System.out.println("❌ Entrada inválida! Digite apenas números.");
-                scanner.nextLine(); // Limpa o buffer em caso de erro
-                System.out.println();
-            }
-        }
-    }
-
-    /**
-     * Inicia o processo de varredura de área florestal
-     */
-    private static void iniciarVarredura() {
-        boolean voltarVarredura = false;
-
-        while (!voltarVarredura) {
-            System.out.println("═══════════════════════════════════════════════════════════════════════════");
-            System.out.println("🔍 VARREDURA DE ÁREA FLORESTAL");
-            System.out.println("═══════════════════════════════════════════════════════════════════════════");
-            System.out.println("Escolha uma das opções abaixo:");
-            System.out.println("1.  🚨 Registrar Nova Ocorrência");
-            System.out.println("2.  ✅ Registrar Área Segura");
-            System.out.println("3.  🔙 Voltar");
-            System.out.print("👉 Digite sua opção: ");
-
-            try {
-                int opcao = scanner.nextInt();
-                scanner.nextLine(); // Limpa o buffer
-
-                switch (opcao) {
-                    case 1:
-                        System.out.println();
-                        proximoIdOcorrencia = Casos.registrarNovaOcorrencia(
-                                areasFlorestais, sensores, drones, ocorrencias,
-                                proximoIdOcorrencia, estacaoAtual, estacoes, scanner
-                        );
-                        break;
-
-                    case 2:
-                        System.out.println();
-                        proximoIdOcorrencia = Casos.registrarAreaSegura(
-                                areasFlorestais, drones, ocorrencias,
-                                proximoIdOcorrencia, estacaoAtual, estacoes, scanner
-                        );
-                        break;
-
-                    case 3:
-                        voltarVarredura = true;
-                        break;
-
-                    default:
-                        System.out.println();
-                        System.out.println("❌ Opção inválida! Por favor, escolha uma opção de 1 a 3.");
-                        System.out.println();
-                        break;
-                }
-
-            } catch (Exception e) {
-                System.out.println();
-                System.out.println("❌ Entrada inválida! Digite apenas números.");
-                scanner.nextLine(); // Limpa o buffer em caso de erro
-                System.out.println();
-            }
-        }
-    }
-
-    /**
-     * Exibe mensagem de agradecimento ao sair do sistema
+     * Exibe mensagem de agradecimento personalizada ao sair do sistema,
+     * incluindo informações da estação atual e nome do comandante.
+     * Finaliza a sessão de forma elegante com feedback visual.
      */
     private static void exibirMensagemSaida() {
         System.out.println();

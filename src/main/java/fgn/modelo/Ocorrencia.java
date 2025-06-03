@@ -4,10 +4,20 @@ import java.time.LocalDateTime;
 import java.time.format.DateTimeFormatter;
 
 /**
- * Classe que representa uma Ocorrência de incêndio detectada
- * Entidade que contém dados e métodos de exibição
+ * <p>
+ * Esta classe representa uma entidade fundamental do sistema Forest Guardian Network:
+ * a Ocorrência de incêndio florestal. Encapsula todos os dados relacionados a um
+ * evento de detecção, desde incêndios ativos até confirmações de áreas seguras,
+ * incluindo metadados de detecção, equipamentos envolvidos e usuários denunciantes.
+ * </p>
+ * <p>
+ * A classe oferece múltiplos construtores para diferentes cenários de registro:
+ * detecção automática por sensores, verificação por drones, processamento de
+ * denúncias de usuários e confirmação de áreas seguras. Calcula automaticamente
+ * níveis de risco baseados em área afetada e fornece métodos de exibição formatada.
+ * </p>
  *
- * @author Equipe FGN
+ * @author Renan Dias Utida, Fernanda Rocha Menon e Luiza Macena Dantas
  * @version 1.0
  */
 public class Ocorrencia {
@@ -23,13 +33,14 @@ public class Ocorrencia {
     private Usuario usuarioDenunciante;
 
     /**
-     * Construtor da Ocorrência (com sensor)
-     * @param idOcorrencia Identificador único da ocorrência
-     * @param areaAfetada Área florestal onde ocorreu o incêndio
-     * @param hectaresAfetados Área em hectares afetada
-     * @param sensorDetector Sensor que detectou o incêndio
-     * @param droneVarredura Drone responsável pela varredura
-     * @param tempoChegadaMinutos Tempo estimado para chegada dos bombeiros
+     * Construtor para ocorrências de incêndio detectadas por sensores durante varredura.
+     *
+     * @param idOcorrencia identificador único sequencial da ocorrência
+     * @param areaAfetada área florestal onde foi detectado o incêndio
+     * @param hectaresAfetados extensão em hectares da área impactada
+     * @param sensorDetector sensor responsável pela detecção inicial
+     * @param droneVarredura drone utilizado para confirmação e varredura
+     * @param tempoChegadaMinutos tempo estimado em minutos para chegada dos bombeiros
      */
     public Ocorrencia(int idOcorrencia, AreaFlorestal areaAfetada, int hectaresAfetados,
                       Sensor sensorDetector, Drone droneVarredura, int tempoChegadaMinutos) {
@@ -46,10 +57,11 @@ public class Ocorrencia {
     }
 
     /**
-     * Construtor para áreas seguras
-     * @param idOcorrencia Identificador único da ocorrência
-     * @param areaAfetada Área florestal averiguada
-     * @param droneVarredura Drone responsável pela varredura
+     * Construtor para registro de áreas confirmadas como seguras após averiguação.
+     *
+     * @param idOcorrencia identificador único sequencial da verificação
+     * @param areaAfetada área florestal averiguada e confirmada como segura
+     * @param droneVarredura drone utilizado para a verificação de segurança
      */
     public Ocorrencia(int idOcorrencia, AreaFlorestal areaAfetada, Drone droneVarredura) {
         this.idOcorrencia = idOcorrencia;
@@ -65,13 +77,14 @@ public class Ocorrencia {
     }
 
     /**
-     * Construtor para denúncias de usuários
-     * @param idOcorrencia Identificador único da ocorrência
-     * @param areaAfetada Área florestal onde ocorreu o incêndio
-     * @param hectaresAfetados Área em hectares afetada
-     * @param droneVarredura Drone responsável pela varredura
-     * @param usuarioDenunciante Usuário que fez a denúncia
-     * @param tempoChegadaMinutos Tempo estimado para chegada dos bombeiros
+     * Construtor para ocorrências reportadas por denúncias de usuários.
+     *
+     * @param idOcorrencia identificador único sequencial da denúncia
+     * @param areaAfetada área florestal reportada na denúncia
+     * @param hectaresAfetados extensão em hectares conforme relato ou verificação
+     * @param droneVarredura drone enviado para verificação da denúncia
+     * @param usuarioDenunciante cidadão que reportou a possível ocorrência
+     * @param tempoChegadaMinutos tempo estimado para chegada dos bombeiros se necessário
      */
     public Ocorrencia(int idOcorrencia, AreaFlorestal areaAfetada, int hectaresAfetados,
                       Drone droneVarredura, Usuario usuarioDenunciante, int tempoChegadaMinutos) {
@@ -94,11 +107,12 @@ public class Ocorrencia {
     }
 
     /**
-     * Construtor para áreas seguras com usuário denunciante
-     * @param idOcorrencia Identificador único da ocorrência
-     * @param areaAfetada Área florestal averiguada
-     * @param droneVarredura Drone responsável pela varredura
-     * @param usuarioDenunciante Usuário que fez a denúncia
+     * Construtor para áreas seguras reportadas inicialmente como denúncias por usuários.
+     *
+     * @param idOcorrencia identificador único sequencial do registro
+     * @param areaAfetada área florestal que foi reportada e averiguada
+     * @param droneVarredura drone utilizado para verificação da denúncia
+     * @param usuarioDenunciante cidadão que fez o relato inicial
      */
     public Ocorrencia(int idOcorrencia, AreaFlorestal areaAfetada, Drone droneVarredura, Usuario usuarioDenunciante) {
         this.idOcorrencia = idOcorrencia;
@@ -114,9 +128,12 @@ public class Ocorrencia {
     }
 
     /**
-     * Calcula o nível de risco baseado na área afetada
-     * @param hectares Área afetada em hectares
-     * @return String com o nível de risco
+     * Calcula automaticamente o nível de risco baseado na extensão da área afetada.
+     * Utiliza escala padronizada para classificação de severidade, auxiliando
+     * na priorização de recursos e tomada de decisões operacionais.
+     *
+     * @param hectares extensão em hectares da área impactada pelo incêndio
+     * @return string representando o nível de risco calculado
      */
     private String calcularNivelRisco(int hectares) {
         if (hectares >= 1 && hectares <= 40) {
@@ -129,10 +146,13 @@ public class Ocorrencia {
     }
 
     /**
-     * Calcula tempo de chegada baseado na distância e velocidade
-     * @param distanciaKm Distância em km
-     * @param velocidadeKmH Velocidade em km/h
-     * @return Tempo em minutos
+     * Calcula tempo estimado de chegada baseado em distância e velocidade.
+     * Metodo estático utilitário para cálculos de logística operacional,
+     * considerando deslocamento terrestre em condições normais.
+     *
+     * @param distanciaKm distância em quilômetros até o local da ocorrência
+     * @param velocidadeKmH velocidade média de deslocamento em km/h
+     * @return tempo estimado em minutos, arredondado para cima
      */
     public static int calcularTempoChegada(int distanciaKm, int velocidadeKmH) {
         double tempoHoras = (double) distanciaKm / velocidadeKmH;
@@ -140,54 +160,119 @@ public class Ocorrencia {
     }
 
     // Getters
+    /**
+     * Obtém o identificador único da ocorrência.
+     *
+     * @return ID numérico sequencial da ocorrência
+     */
     public int getIdOcorrencia() {
         return idOcorrencia;
     }
 
+    /**
+     * Obtém a área florestal onde ocorreu o evento.
+     *
+     * @return objeto AreaFlorestal associado à ocorrência
+     */
     public AreaFlorestal getAreaAfetada() {
         return areaAfetada;
     }
 
+    /**
+     * Obtém a extensão em hectares da área impactada.
+     * Valor zero indica área confirmada como segura.
+     *
+     * @return número de hectares afetados pelo incêndio
+     */
     public int getHectaresAfetados() {
         return hectaresAfetados;
     }
 
+    /**
+     * Obtém o nível de risco calculado da ocorrência.
+     * Baseado na extensão da área afetada segundo escala padronizada.
+     *
+     * @return string representando nível de risco ("Investigação", "Alerta Ativo", "Emergência", "Seguro")
+     */
     public String getNivelRisco() {
         return nivelRisco;
     }
 
+    /**
+     * Obtém o sensor responsável pela detecção inicial.
+     * Pode ser null para ocorrências detectadas apenas por drone.
+     *
+     * @return objeto Sensor detector ou null se detecção foi por drone
+     */
     public Sensor getSensorDetector() {
         return sensorDetector;
     }
 
+    /**
+     * Obtém o drone utilizado para varredura e verificação.
+     * Sempre presente em todas as ocorrências do sistema.
+     *
+     * @return objeto Drone responsável pela varredura
+     */
     public Drone getDroneVarredura() {
         return droneVarredura;
     }
 
+    /**
+     * Obtém timestamp completo de quando a ocorrência foi detectada.
+     * Marcação automática no momento da criação do registro.
+     *
+     * @return objeto LocalDateTime com data e hora da detecção
+     */
     public LocalDateTime getDataHoraDeteccao() {
         return dataHoraDeteccao;
     }
 
+    /**
+     * Obtém tempo estimado em minutos para chegada das equipes.
+     * Baseado em cálculo de distância e velocidade média de deslocamento.
+     *
+     * @return tempo estimado de chegada em minutos
+     */
     public int getTempoChegadaMinutos() {
         return tempoChegadaMinutos;
     }
 
+    /**
+     * Obtém status atual da ocorrência.
+     * Indica se requer ação ("Ativo") ou foi resolvida ("Concluído").
+     *
+     * @return string representando status ("Ativo" ou "Concluído")
+     */
     public String getStatusOcorrencia() {
         return statusOcorrencia;
     }
 
+    /**
+     * Obtém dados do cidadão que reportou a ocorrência.
+     * Pode ser null para detecções automáticas por sensores.
+     *
+     * @return objeto Usuario denunciante ou null se detecção automática
+     */
     public Usuario getUsuarioDenunciante() {
         return usuarioDenunciante;
     }
 
     // Setters
+    /**
+     * Define novo status para a ocorrência.
+     * Utilizado para atualizar estado conforme progresso das operações.
+     *
+     * @param statusOcorrencia novo status a ser definido ("Ativo" ou "Concluído")
+     */
     public void setStatusOcorrencia(String statusOcorrencia) {
         this.statusOcorrencia = statusOcorrencia;
     }
 
     /**
-     * Marca a ocorrência como resolvida (área segura)
-     * Usado quando o incêndio é apagado com sucesso
+     * Marca a ocorrência como resolvida convertendo para área segura.
+     * Utilizado quando incêndios são extintos com sucesso pelas equipes
+     * de combate, zerando hectares afetados e atualizando status.
      */
     public void marcarComoSegura() {
         this.statusOcorrencia = "Concluído";
@@ -196,8 +281,11 @@ public class Ocorrencia {
     }
 
     /**
-     * Exibe relatório completo da ocorrência
-     * @param estacaoResponsavel Estação responsável pela área
+     * Exibe relatório completo e formatado da ocorrência.
+     * Apresenta todos os dados relevantes em formato estruturado para
+     * documentação oficial e comunicação com equipes de combate.
+     *
+     * @param estacaoResponsavel estação de bombeiros responsável pela área
      */
     public void exibirRelatorio(EstacaoBombeiros estacaoResponsavel) {
         DateTimeFormatter formatter = DateTimeFormatter.ofPattern("dd/MM/yyyy HH:mm:ss");
@@ -250,8 +338,11 @@ public class Ocorrencia {
     }
 
     /**
-     * Exibe relatório resumido para listagem
-     * @param estacaoResponsavel Estação responsável pela área
+     * Exibe resumo compacto da ocorrência para listagens e consultas rápidas.
+     * Apresenta informações essenciais em formato condensado, ideal para
+     * visualização de múltiplas ocorrências em relatórios consolidados.
+     *
+     * @param estacaoResponsavel estação de bombeiros responsável pela área
      */
     public void exibirResumo(EstacaoBombeiros estacaoResponsavel) {
         DateTimeFormatter formatter = DateTimeFormatter.ofPattern("dd/MM/yyyy HH:mm");

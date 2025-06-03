@@ -1,27 +1,36 @@
 package fgn.modelo;
 
 import java.time.format.DateTimeFormatter;
-import java.util.ArrayList;
-import java.util.HashMap;
-import java.util.Map;
-import java.util.Scanner;
+import java.util.*;
 
 /**
- * Classe responsável pela geração de relatórios e estatísticas avançadas
- * Gerencia análises detalhadas do sistema de monitoramento
+ * <p>
+ * Esta classe é responsável pela geração de relatórios detalhados e estatísticas avançadas
+ * do sistema Forest Guardian Network. Oferece análises completas de desempenho das estações,
+ * métricas de eficiência no combate a incêndios e ferramentas administrativas para
+ * manutenção do sistema.
+ * </p>
+ * <p>
+ * A classe fornece funcionalidades para visualização de dados consolidados, verificação
+ * de estatísticas por estação, análise de tendências e operações de limpeza de dados.
+ * Inclui avaliações de desempenho e classificações automáticas baseadas em resultados.
+ * </p>
  *
- * @author Equipe FGN
+ * @author Renan Dias Utida, Fernanda Rocha Menon e Luiza Macena Dantas
  * @version 1.0
  */
 public class RelatoriosEstatisticas {
 
     /**
-     * Exibe o menu principal de relatórios e estatísticas
-     * @param ocorrencias Lista de ocorrências
-     * @param estacoes Lista de estações
-     * @param areasFlorestais Lista de áreas florestais
-     * @param estacaoAtual Estação atual logada
-     * @param scanner Scanner para entrada do usuário
+     * Exibe o menu principal de relatórios e estatísticas do sistema.
+     * Oferece opções para visualizar estações cadastradas, dados da estação atual,
+     * limpeza de dados e navegação. Mantém loop até o usuário escolher voltar.
+     *
+     * @param ocorrencias lista completa de ocorrências do sistema
+     * @param estacoes lista de todas as estações de bombeiros
+     * @param areasFlorestais lista de áreas florestais monitoradas
+     * @param estacaoAtual estação de bombeiros atualmente logada
+     * @param scanner objeto Scanner para captura de entrada do usuário
      */
     public static void exibirMenuRelatorios(ArrayList<Ocorrencia> ocorrencias, ArrayList<EstacaoBombeiros> estacoes,
                                             ArrayList<AreaFlorestal> areasFlorestais, EstacaoBombeiros estacaoAtual, Scanner scanner) {
@@ -79,8 +88,11 @@ public class RelatoriosEstatisticas {
     }
 
     /**
-     * Exibe todas as estações de bombeiros cadastradas no sistema
-     * @param estacoes Lista de estações
+     * Exibe relatório completo de todas as estações de bombeiros cadastradas.
+     * Apresenta informações consolidadas incluindo comandantes, localizações
+     * e estatísticas gerais de cobertura do sistema.
+     *
+     * @param estacoes lista de estações de bombeiros a serem exibidas
      */
     public static void exibirEstacoesCadastradas(ArrayList<EstacaoBombeiros> estacoes) {
         System.out.println("═══════════════════════════════════════════════════════════════════════════");
@@ -107,10 +119,13 @@ public class RelatoriosEstatisticas {
     }
 
     /**
-     * Verifica dados detalhados da estação atual (sem perguntar ID)
-     * @param ocorrencias Lista de ocorrências
-     * @param estacaoAtual Estação atual logada
-     * @param areasFlorestais Lista de áreas florestais
+     * Verifica e exibe dados detalhados da estação atualmente logada.
+     * Filtra automaticamente ocorrências e áreas da estação para análise
+     * específica sem necessidade de entrada adicional do usuário.
+     *
+     * @param ocorrencias lista completa de ocorrências do sistema
+     * @param estacaoAtual estação de bombeiros atualmente logada
+     * @param areasFlorestais lista de áreas florestais monitoradas
      */
     public static void verificarDadosDaEstacaoAtual(ArrayList<Ocorrencia> ocorrencias, EstacaoBombeiros estacaoAtual, ArrayList<AreaFlorestal> areasFlorestais) {
         System.out.println("═══════════════════════════════════════════════════════════════════════════");
@@ -125,10 +140,13 @@ public class RelatoriosEstatisticas {
     }
 
     /**
-     * Exibe estatísticas completas da estação atual (com últimas atividades e avaliação)
-     * @param estacao Estação atual
-     * @param ocorrencias Lista de ocorrências da estação
-     * @param areas Lista de áreas da estação
+     * Exibe relatório estatístico completo e avaliação de desempenho da estação.
+     * Calcula métricas avançadas incluindo taxa de resolução, distribuição por risco,
+     * análise de áreas mais afetadas e classificação de desempenho automatizada.
+     *
+     * @param estacao estação de bombeiros para análise
+     * @param ocorrencias lista de ocorrências filtradas da estação
+     * @param areas lista de áreas florestais supervisionadas pela estação
      */
     private static void exibirEstatisticasCompletasDaEstacao(EstacaoBombeiros estacao, ArrayList<Ocorrencia> ocorrencias, ArrayList<AreaFlorestal> areas) {
         DateTimeFormatter formatter = DateTimeFormatter.ofPattern("dd/MM/yyyy HH:mm");
@@ -291,10 +309,13 @@ public class RelatoriosEstatisticas {
     }
 
     /**
-     * Limpa todas as ocorrências da cidade atual
-     * @param ocorrencias Lista de ocorrências
-     * @param estacaoAtual Estação atual logada
-     * @param scanner Scanner para entrada do usuário
+     * Executa processo seguro de limpeza de todas as ocorrências da cidade atual.
+     * Solicita confirmação do usuário, exibe resumo das ocorrências a serem removidas
+     * e atualiza automaticamente o arquivo de histórico após a operação.
+     *
+     * @param ocorrencias lista completa de ocorrências do sistema
+     * @param estacaoAtual estação de bombeiros atualmente logada
+     * @param scanner objeto Scanner para captura de entrada do usuário
      */
     public static void limparOcorrenciasDaCidade(ArrayList<Ocorrencia> ocorrencias, EstacaoBombeiros estacaoAtual, Scanner scanner) {
         System.out.println("═══════════════════════════════════════════════════════════════════════════");
@@ -362,10 +383,13 @@ public class RelatoriosEstatisticas {
     }
 
     /**
-     * Filtra ocorrências de uma estação específica
-     * @param ocorrencias Lista completa de ocorrências
-     * @param idEstacao ID da estação a filtrar
-     * @return Lista filtrada apenas da estação
+     * Filtra ocorrências pertencentes a uma estação específica.
+     * Metodo utilitário usado para análises e operações que requerem
+     * dados isolados por jurisdição da estação.
+     *
+     * @param ocorrencias lista completa de ocorrências do sistema
+     * @param idEstacao ID da estação de bombeiros para filtrar
+     * @return lista contendo apenas ocorrências da estação especificada
      */
     private static ArrayList<Ocorrencia> filtrarOcorrenciasPorEstacao(ArrayList<Ocorrencia> ocorrencias, int idEstacao) {
         ArrayList<Ocorrencia> ocorrenciasFiltradas = new ArrayList<>();
@@ -378,10 +402,13 @@ public class RelatoriosEstatisticas {
     }
 
     /**
-     * Obtém áreas florestais de uma estação específica
-     * @param areasFlorestais Lista completa de áreas
-     * @param idEstacao ID da estação
-     * @return Lista de áreas da estação
+     * Obtém lista de áreas florestais supervisionadas por uma estação específica.
+     * Filtra áreas por responsabilidade jurisdicional para análises regionais
+     * e cálculos de cobertura de monitoramento.
+     *
+     * @param areasFlorestais lista completa de áreas florestais do sistema
+     * @param idEstacao ID da estação de bombeiros responsável
+     * @return lista contendo apenas áreas supervisionadas pela estação
      */
     private static ArrayList<AreaFlorestal> obterAreasFlorestaisPorEstacao(ArrayList<AreaFlorestal> areasFlorestais, int idEstacao) {
         ArrayList<AreaFlorestal> areas = new ArrayList<>();

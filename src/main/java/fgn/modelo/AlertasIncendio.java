@@ -1,25 +1,34 @@
 package fgn.modelo;
 
 import java.time.format.DateTimeFormatter;
-import java.util.ArrayList;
-import java.util.HashMap;
-import java.util.Map;
-import java.util.Scanner;
+import java.util.*;
 
 /**
- * Classe responsável pelo monitoramento e atendimento de alertas de incêndio
- * Gerencia operações específicas para casos ativos de incêndio
+ * <p>
+ * Esta classe é responsável pelo monitoramento e atendimento especializado de alertas de incêndio
+ * no sistema Forest Guardian Network. Oferece funcionalidades para listagem, atendimento individual
+ * e atendimento em massa de ocorrências de incêndio, com foco em casos ativos que requerem
+ * intervenção imediata dos bombeiros.
+ * </p>
+ * <p>
+ * A classe gerencia operações específicas para casos críticos de incêndio, permitindo que as
+ * estações de bombeiros respondam rapidamente a emergências e coordenem esforços de combate.
+ * Integra-se com o sistema de arquivos para persistência automática de dados.
+ * </p>
  *
- * @author Equipe FGN
+ * @author Renan Dias Utida, Fernanda Rocha Menon e Luiza Macena Dantas
  * @version 1.0
  */
 public class AlertasIncendio {
 
     /**
-     * Exibe o menu principal de monitoramento de alertas
-     * @param ocorrencias Lista de ocorrências
-     * @param estacaoAtual Estação atual logada
-     * @param scanner Scanner para entrada do usuário
+     * Exibe o menu principal de monitoramento de alertas de incêndio.
+     * Oferece opções para listagem, atendimento individual e atendimento por local
+     * de ocorrências ativas. Mantém loop até o usuário escolher voltar.
+     *
+     * @param ocorrencias lista completa de ocorrências do sistema
+     * @param estacaoAtual estação de bombeiros atualmente logada
+     * @param scanner objeto Scanner para captura de entrada do usuário
      */
     public static void exibirMenuAlertas(ArrayList<Ocorrencia> ocorrencias, EstacaoBombeiros estacaoAtual, Scanner scanner) {
         boolean voltarMenu = false;
@@ -76,9 +85,12 @@ public class AlertasIncendio {
     }
 
     /**
-     * Lista apenas os casos de incêndio ativos da cidade (não exibe áreas seguras)
-     * @param ocorrencias Lista de ocorrências
-     * @param estacaoAtual Estação atual logada
+     * Lista exclusivamente os casos de incêndio ativos da cidade atual.
+     * Filtra e exibe apenas ocorrências com status "Ativo" e nível de risco
+     * diferente de "Seguro", fornecendo visão focada em emergências.
+     *
+     * @param ocorrencias lista completa de ocorrências do sistema
+     * @param estacaoAtual estação de bombeiros para filtrar por jurisdição
      */
     public static void listarCasosIncendio(ArrayList<Ocorrencia> ocorrencias, EstacaoBombeiros estacaoAtual) {
         System.out.println("═══════════════════════════════════════════════════════════════════════════");
@@ -112,9 +124,12 @@ public class AlertasIncendio {
     }
 
     /**
-     * Exibe resumo específico para alertas de incêndio (formato compacto)
-     * @param ocorrencia Ocorrência de incêndio
-     * @param estacaoResponsavel Estação responsável
+     * Exibe um resumo compacto específico para alertas de incêndio.
+     * Apresenta informações essenciais da ocorrência em formato otimizado
+     * para tomada rápida de decisões em situações de emergência.
+     *
+     * @param ocorrencia ocorrência de incêndio a ser exibida
+     * @param estacaoResponsavel estação responsável pela ocorrência
      */
     private static void exibirResumoIncendio(Ocorrencia ocorrencia, EstacaoBombeiros estacaoResponsavel) {
         DateTimeFormatter formatter = DateTimeFormatter.ofPattern("dd/MM/yyyy HH:mm");
@@ -128,10 +143,13 @@ public class AlertasIncendio {
     }
 
     /**
-     * Atende uma ocorrência específica, enviando reforços e resolvendo o incêndio
-     * @param ocorrencias Lista de ocorrências
-     * @param estacaoAtual Estação atual logada
-     * @param scanner Scanner para entrada do usuário
+     * Atende uma ocorrência específica de incêndio, realizando processo completo
+     * de combate. Permite seleção de incêndio ativo, simula operação de combate
+     * e marca automaticamente a ocorrência como segura ao final.
+     *
+     * @param ocorrencias lista completa de ocorrências do sistema
+     * @param estacaoAtual estação de bombeiros executando o atendimento
+     * @param scanner objeto Scanner para captura de entrada do usuário
      */
     public static void atenderOcorrencia(ArrayList<Ocorrencia> ocorrencias, EstacaoBombeiros estacaoAtual, Scanner scanner) {
         System.out.println("═══════════════════════════════════════════════════════════════════════════");
@@ -241,10 +259,13 @@ public class AlertasIncendio {
     }
 
     /**
-     * Atende todas as ocorrências de um local específico - resolve todos os incêndios ativos de uma área
-     * @param ocorrencias Lista de ocorrências
-     * @param estacaoAtual Estação atual logada
-     * @param scanner Scanner para entrada do usuário
+     * Atende todas as ocorrências de incêndio de um local específico simultaneamente.
+     * Agrupa incêndios por área florestal e permite operação focada para resolver
+     * múltiplos focos de uma vez, otimizando recursos de combate.
+     *
+     * @param ocorrencias lista completa de ocorrências do sistema
+     * @param estacaoAtual estação de bombeiros executando a operação
+     * @param scanner objeto Scanner para captura de entrada do usuário
      */
     public static void atenderOcorrenciaNoLocal(ArrayList<Ocorrencia> ocorrencias, EstacaoBombeiros estacaoAtual, Scanner scanner) {
         System.out.println("═══════════════════════════════════════════════════════════════════════════");
@@ -391,106 +412,14 @@ public class AlertasIncendio {
         }
     }
 
-//        // Mostrar casos de incêndio primeiro
-//        System.out.println("🚨 CASOS DE INCÊNDIO ATIVOS:");
-//        System.out.println();
-//        for (Ocorrencia ocorrencia : incendiosAtivos) {
-//            exibirResumoIncendio(ocorrencia, estacaoAtual);
-//        }
-//
-//        System.out.println("═══════════════════════════════════════════════════════════════════════════");
-//        System.out.println("🚒 SELECIONE UM LOCAL PARA ATENDIMENTO GERAL:");
-//        System.out.println("═══════════════════════════════════════════════════════════════════════════");
-//        System.out.println();
-//
-//        // Mostrar menu simples com IDs e locais
-//        for (Ocorrencia ocorrencia : incendiosAtivos) {
-//            System.out.println("#" + ocorrencia.getIdOcorrencia() + " - " + ocorrencia.getAreaAfetada().getNomeArea());
-//        }
-//
-//        System.out.println();
-//        System.out.print("🚒 Digite o ID de qualquer área para atender TODOS os incêndios da cidade: ");
-//
-//        try {
-//            int idEscolhido = scanner.nextInt();
-//            scanner.nextLine(); // Limpa o buffer
-//
-//            // Verificar se o ID escolhido existe
-//            boolean idValido = false;
-//            for (Ocorrencia ocorrencia : incendiosAtivos) {
-//                if (ocorrencia.getIdOcorrencia() == idEscolhido) {
-//                    idValido = true;
-//                    break;
-//                }
-//            }
-//
-//            if (!idValido) {
-//                System.out.println("❌ ID inválido! Nenhuma ocorrência ativa encontrada com este ID.");
-//                System.out.println();
-//                return;
-//            }
-//
-//            // Mostrar processo de atendimento geral
-//            System.out.println();
-//            System.out.println("═══════════════════════════════════════════════════════════════════════════");
-//            System.out.println("🚒 OPERAÇÃO ESPECIAL - ATENDIMENTO GERAL DE INCÊNDIOS");
-//            System.out.println("═══════════════════════════════════════════════════════════════════════════");
-//            System.out.println("🌆 Cidade: " + estacaoAtual.getCidade());
-//            System.out.println("🚨 Total de incêndios a serem atendidos: " + incendiosAtivos.size());
-//            System.out.println();
-//            System.out.println("📍 Locais em atendimento:");
-//
-//            for (Ocorrencia ocorrencia : incendiosAtivos) {
-//                System.out.println("   • #" + ocorrencia.getIdOcorrencia() + " - " + ocorrencia.getAreaAfetada().getNomeArea() + " (" + ocorrencia.getHectaresAfetados() + " hectares)");
-//            }
-//
-//            System.out.println();
-//            System.out.println("🚨 Despachando todas as equipes disponíveis!");
-//            System.out.println("🚒 Operação coordenada em andamento...");
-//            System.out.println("═══════════════════════════════════════════════════════════════════════════");
-//            System.out.println();
-//
-//            // Simular tempo de combate coordenado (3 segundos)
-//            System.out.println("🔥 Combate coordenado aos incêndios em andamento...");
-//
-//            try {
-//                Thread.sleep(5000); // Espera 5 segundos
-//            } catch (InterruptedException e) {
-//                // Ignorar interrupção
-//            }
-//
-//            // Mostrar sucesso
-//            System.out.println();
-//            System.out.println("✅ TODOS OS INCÊNDIOS APAGADOS COM SUCESSO!");
-//            System.out.println("🌿 Todas as " + incendiosAtivos.size() + " ocorrências agora estão seguras!");
-//            System.out.println("👨‍🚒 Todas as equipes retornando à base...");
-//            System.out.println();
-//
-//            // Marcar TODAS as ocorrências como seguras
-//            for (Ocorrencia ocorrencia : incendiosAtivos) {
-//                ocorrencia.marcarComoSegura();
-//            }
-//
-//            // Atualizar arquivo automaticamente
-//            ArrayList<Ocorrencia> ocorrenciasDaEstacao = filtrarOcorrenciasPorEstacao(ocorrencias, estacaoAtual.getIdEstacao());
-//            Arquivo.salvarHistoricoDaCidade(ocorrenciasDaEstacao, estacaoAtual);
-//
-//            System.out.println("💾 Todos os registros atualizados automaticamente!");
-//            System.out.println("🎉 Operação concluída com sucesso em " + estacaoAtual.getCidade() + "!");
-//            System.out.println();
-//
-//        } catch (Exception e) {
-//            System.out.println("❌ Entrada inválida! Digite apenas números.");
-//            scanner.nextLine(); // Limpa o buffer em caso de erro
-//            System.out.println();
-//        }
-//    }
-
     /**
-     * Filtra ocorrências de uma estação específica
-     * @param ocorrencias Lista completa de ocorrências
-     * @param idEstacao ID da estação a filtrar
-     * @return Lista filtrada apenas da estação
+     * Filtra ocorrências pertencentes a uma estação específica.
+     * Utilizado para operações que devem considerar apenas a jurisdição
+     * da estação atualmente logada no sistema.
+     *
+     * @param ocorrencias lista completa de ocorrências do sistema
+     * @param idEstacao ID da estação de bombeiros para filtrar
+     * @return lista contendo apenas ocorrências da estação especificada
      */
     private static ArrayList<Ocorrencia> filtrarOcorrenciasPorEstacao(ArrayList<Ocorrencia> ocorrencias, int idEstacao) {
         ArrayList<Ocorrencia> ocorrenciasFiltradas = new ArrayList<>();

@@ -4,25 +4,39 @@ import java.util.ArrayList;
 import java.util.Scanner;
 
 /**
- * Classe responsável pela lógica de negócio das ocorrências
- * Contém métodos para registrar, processar e gerenciar ocorrências
+ * <p>
+ * Esta classe é responsável pela lógica de negócio central das ocorrências no sistema
+ * Forest Guardian Network. Gerencia todo o ciclo de vida das ocorrências, desde o
+ * registro inicial de incêndios detectados por sensores até o processamento de denúncias
+ * de usuários e confirmação de áreas seguras.
+ * </p>
+ * <p>
+ * A classe atua como um controlador principal que coordena operações entre drones,
+ * sensores, áreas florestais e usuários, garantindo que todas as ocorrências sejam
+ * adequadamente registradas, validadas e persistidas no sistema de arquivos.
+ * Implementa validações robustas e feedback interativo para operadores.
+ * </p>
  *
- * @author Equipe FGN
+ * @author Renan Dias Utida, Fernanda Rocha Menon e Luiza Macena Dantas
  * @version 1.0
  */
 public class Casos {
 
     /**
-     * Registra uma nova ocorrência de incêndio
-     * @param areasFlorestais Lista de áreas florestais
-     * @param sensores Lista de sensores
-     * @param drones Lista de drones
-     * @param ocorrencias Lista de ocorrências
-     * @param proximoIdOcorrencia Próximo ID disponível
-     * @param estacaoAtual Estação logada
-     * @param estacoes Lista de todas as estações
-     * @param scanner Scanner para entrada do usuário
-     * @return Novo ID de ocorrência
+     * Registra uma nova ocorrência de incêndio detectada por sensores durante varredura.
+     * Executa processo completo incluindo seleção de drone, varredura aérea, escolha
+     * de área afetada, quantificação de hectares, análise por sensor e cálculo de
+     * tempo de chegada. Persiste automaticamente os dados no arquivo da cidade.
+     *
+     * @param areasFlorestais lista de áreas florestais disponíveis para seleção
+     * @param sensores lista de sensores disponíveis para detecção
+     * @param drones lista de drones disponíveis para varredura
+     * @param ocorrencias lista de ocorrências onde será adicionado o novo registro
+     * @param proximoIdOcorrencia próximo ID disponível para a nova ocorrência
+     * @param estacaoAtual estação de bombeiros executando o registro
+     * @param estacoes lista completa de estações para referência
+     * @param scanner objeto Scanner para captura de entrada do usuário
+     * @return ID incrementado para próxima ocorrência ou ID original em caso de erro
      */
     public static int registrarNovaOcorrencia(ArrayList<AreaFlorestal> areasFlorestais, ArrayList<Sensor> sensores, ArrayList<Drone> drones,
                                               ArrayList<Ocorrencia> ocorrencias, int proximoIdOcorrencia,
@@ -164,15 +178,19 @@ public class Casos {
     }
 
     /**
-     * Registra uma área como segura após averiguação
-     * @param areasFlorestais Lista de áreas florestais
-     * @param drones Lista de drones
-     * @param ocorrencias Lista de ocorrências
-     * @param proximoIdOcorrencia Próximo ID disponível
-     * @param estacaoAtual Estação logada
-     * @param estacoes Lista de todas as estações
-     * @param scanner Scanner para entrada do usuário
-     * @return Novo ID de ocorrência
+     * Registra uma área como segura após averiguação por drone.
+     * Realiza verificação aérea completa para confirmar ausência de focos de incêndio,
+     * permitindo seleção de área e registro de confirmação de segurança.
+     * Ideal para monitoramento preventivo e verificação de áreas suspeitas.
+     *
+     * @param areasFlorestais lista de áreas florestais disponíveis para verificação
+     * @param drones lista de drones disponíveis para averiguação
+     * @param ocorrencias lista de ocorrências onde será registrada a área segura
+     * @param proximoIdOcorrencia próximo ID disponível para o novo registro
+     * @param estacaoAtual estação de bombeiros executando a verificação
+     * @param estacoes lista completa de estações para referência
+     * @param scanner objeto Scanner para captura de entrada do usuário
+     * @return ID incrementado para próxima ocorrência ou ID original em caso de erro
      */
     public static int registrarAreaSegura(ArrayList<AreaFlorestal> areasFlorestais, ArrayList<Drone> drones,
                                           ArrayList<Ocorrencia> ocorrencias, int proximoIdOcorrencia,
@@ -262,15 +280,19 @@ public class Casos {
     }
 
     /**
-     * Processa denúncia de usuário
-     * @param areasFlorestais Lista de áreas florestais
-     * @param drones Lista de drones
-     * @param ocorrencias Lista de ocorrências
-     * @param proximoIdOcorrencia Próximo ID disponível
-     * @param estacaoAtual Estação logada
-     * @param estacoes Lista de todas as estações
-     * @param scanner Scanner para entrada do usuário
-     * @return Novo ID de ocorrência
+     * Processa denúncia de usuário com validação completa e verificação por drone.
+     * Executa fluxo completo incluindo coleta e validação de dados pessoais,
+     * seleção de área reportada, avaliação de nível de risco percebido,
+     * verificação aérea e registro conforme resultado real encontrado.
+     *
+     * @param areasFlorestais lista de áreas florestais disponíveis para denúncia
+     * @param drones lista de drones disponíveis para verificação
+     * @param ocorrencias lista de ocorrências onde será registrado o resultado
+     * @param proximoIdOcorrencia próximo ID disponível para novo registro
+     * @param estacaoAtual estação de bombeiros processando a denúncia
+     * @param estacoes lista completa de estações para referência
+     * @param scanner objeto Scanner para captura de entrada do usuário
+     * @return ID incrementado para próxima ocorrência ou ID original em caso de erro
      */
     public static int relatarDenunciaUsuario(ArrayList<AreaFlorestal> areasFlorestais, ArrayList<Drone> drones,
                                              ArrayList<Ocorrencia> ocorrencias, int proximoIdOcorrencia,
@@ -511,10 +533,13 @@ public class Casos {
     }
 
     /**
-     * Lista todas as ocorrências de uma estação específica e salva no arquivo da cidade
-     * @param ocorrencias Lista de ocorrências
-     * @param estacoes Lista de estações
-     * @param estacaoAtual Estação logada atualmente
+     * Lista todas as ocorrências registradas por uma estação específica.
+     * Filtra registros por jurisdição da estação, exibe resumos formatados
+     * e salva automaticamente o histórico atualizado no arquivo da cidade.
+     *
+     * @param ocorrencias lista completa de ocorrências do sistema
+     * @param estacoes lista de estações para referência (parâmetro para compatibilidade)
+     * @param estacaoAtual estação de bombeiros cuja jurisdição será listada
      */
     public static void listarOcorrenciasDaEstacao(ArrayList<Ocorrencia> ocorrencias, ArrayList<EstacaoBombeiros> estacoes, EstacaoBombeiros estacaoAtual) {
         System.out.println("═══════════════════════════════════════════════════════════════════════════");
@@ -552,9 +577,12 @@ public class Casos {
     }
 
     /**
-     * Calcula hectares baseado no nível de risco percebido
-     * @param nivelRisco Nível de risco (1-3)
-     * @return Hectares estimados
+     * Calcula estimativa de hectares afetados baseado no nível de risco percebido.
+     * Utiliza escala predefinida para conversão de percepção humana em valores
+     * quantitativos adequados para registro oficial.
+     *
+     * @param nivelRisco nível de risco informado pelo usuário (1-3)
+     * @return número estimado de hectares correspondente ao nível de risco
      */
     private static int calcularHectaresPorRisco(int nivelRisco) {
         switch (nivelRisco) {
@@ -566,10 +594,13 @@ public class Casos {
     }
 
     /**
-     * Obtém o drone específico de uma estação
-     * @param drones Lista de drones
-     * @param idEstacao ID da estação
-     * @return Drone da estação ou null
+     * Obtém o drone específico designado para uma estação de bombeiros.
+     * Busca na lista de drones disponíveis pelo ID da estação base,
+     * garantindo que cada estação utilize seu equipamento próprio.
+     *
+     * @param drones lista de drones disponíveis no sistema
+     * @param idEstacao ID da estação de bombeiros proprietária
+     * @return objeto Drone da estação ou null se não encontrado
      */
     private static Drone obterDroneDaEstacao(ArrayList<Drone> drones, int idEstacao) {
         for (Drone drone : drones) {
@@ -581,10 +612,13 @@ public class Casos {
     }
 
     /**
-     * Filtra ocorrências de uma estação específica
-     * @param ocorrencias Lista completa de ocorrências
-     * @param idEstacao ID da estação a filtrar
-     * @return Lista filtrada apenas da estação
+     * Filtra ocorrências pertencentes a uma estação específica.
+     * Metodo utilitário para operações que requerem dados isolados
+     * por jurisdição territorial das estações de bombeiros.
+     *
+     * @param ocorrencias lista completa de ocorrências do sistema
+     * @param idEstacao ID da estação de bombeiros para filtrar
+     * @return lista contendo apenas ocorrências da estação especificada
      */
     private static ArrayList<Ocorrencia> filtrarOcorrenciasPorEstacao(ArrayList<Ocorrencia> ocorrencias, int idEstacao) {
         ArrayList<Ocorrencia> ocorrenciasFiltradas = new ArrayList<>();
@@ -597,10 +631,13 @@ public class Casos {
     }
 
     /**
-     * Obtém áreas florestais de uma estação específica
-     * @param areasFlorestais Lista completa de áreas
-     * @param idEstacao ID da estação
-     * @return Lista de áreas da estação
+     * Obtém áreas florestais supervisionadas por uma estação específica.
+     * Filtra áreas por responsabilidade jurisdicional para permitir
+     * operações localizadas e seleção adequada de locais.
+     *
+     * @param areasFlorestais lista completa de áreas florestais do sistema
+     * @param idEstacao ID da estação de bombeiros responsável
+     * @return lista contendo apenas áreas supervisionadas pela estação
      */
     private static ArrayList<AreaFlorestal> obterAreasFlorestaisPorEstacao(ArrayList<AreaFlorestal> areasFlorestais, int idEstacao) {
         ArrayList<AreaFlorestal> areas = new ArrayList<>();
@@ -613,10 +650,13 @@ public class Casos {
     }
 
     /**
-     * Busca uma área florestal por ID na lista disponível
-     * @param idArea ID da área
-     * @param areasDisponiveis Lista de áreas disponíveis
-     * @return AreaFlorestal encontrada ou null
+     * Busca uma área florestal específica pelo ID na lista disponível.
+     * Metodo de busca utilizado para validação de seleções do usuário
+     * e garantia de que a área escolhida existe na jurisdição atual.
+     *
+     * @param idArea ID da área florestal procurada
+     * @param areasDisponiveis lista de áreas disponíveis para seleção
+     * @return objeto AreaFlorestal encontrado ou null se inexistente
      */
     private static AreaFlorestal buscarAreaPorId(int idArea, ArrayList<AreaFlorestal> areasDisponiveis) {
         for (AreaFlorestal area : areasDisponiveis) {
@@ -628,10 +668,13 @@ public class Casos {
     }
 
     /**
-     * Busca um sensor por ID
-     * @param idSensor ID do sensor
-     * @param sensores Lista de sensores
-     * @return Sensor encontrado ou null
+     * Busca um sensor específico pelo ID na lista de sensores disponíveis.
+     * Utilizado para validação de seleções durante registro de ocorrências
+     * e associação correta de equipamentos detectores.
+     *
+     * @param idSensor ID do sensor procurado
+     * @param sensores lista completa de sensores disponíveis
+     * @return objeto Sensor encontrado ou null se inexistente
      */
     private static Sensor buscarSensorPorId(int idSensor, ArrayList<Sensor> sensores) {
         for (Sensor sensor : sensores) {
@@ -643,10 +686,13 @@ public class Casos {
     }
 
     /**
-     * Busca uma estação por ID
-     * @param idEstacao ID da estação
-     * @param estacoes Lista de estações
-     * @return EstacaoBombeiros encontrada ou null
+     * Busca uma estação de bombeiros específica pelo ID.
+     * Metodo utilitário para localização de estações em operações
+     * que requerem validação ou referência cruzada.
+     *
+     * @param idEstacao ID da estação de bombeiros procurada
+     * @param estacoes lista completa de estações cadastradas
+     * @return objeto EstacaoBombeiros encontrado ou null se inexistente
      */
     private static EstacaoBombeiros buscarEstacaoPorId(int idEstacao, ArrayList<EstacaoBombeiros> estacoes) {
         for (EstacaoBombeiros estacao : estacoes) {

@@ -3,21 +3,35 @@ package fgn.modelo;
 import java.util.ArrayList;
 
 /**
- * Classe responsável pela persistência de dados das ocorrências
- * Gerencia operações de leitura e escrita em arquivos
+ * <p>
+ * Esta classe é responsável pela camada de persistência de dados do sistema
+ * Forest Guardian Network. Gerencia todas as operações de entrada e saída de
+ * arquivos relacionadas ao histórico de ocorrências, proporcionando capacidades
+ * de carregamento, análise textual e salvamento de dados estruturados.
+ * </p>
+ * <p>
+ * A classe implementa parsing robusto de arquivos de texto formatados com emojis
+ * e estrutura hierárquica, convertendo dados textuais em objetos do sistema.
+ * Organiza dados por cidade/estação, criando arquivos específicos para cada
+ * jurisdição territorial e mantendo histórico persistente entre sessões.
+ * </p>
  *
- * @author Equipe FGN
+ * @author Renan Dias Utida, Fernanda Rocha Menon e Luiza Macena Dantas
  * @version 1.0
  */
 public class Arquivo {
 
     /**
-     * Carrega o histórico de ocorrências de uma cidade específica
-     * @param estacaoAtual Estação que está fazendo login
-     * @param ocorrencias Lista de ocorrências a ser preenchida
-     * @param estacoes Lista de todas as estações
-     * @param areasFlorestais Lista de áreas florestais
-     * @param drones Lista de drones
+     * Carrega o histórico completo de ocorrências de uma cidade específica.
+     * Realiza parsing de arquivo texto estruturado, convertendo registros
+     * formatados em objetos Ocorrencia com todos os relacionamentos preservados.
+     * Cria arquivo automaticamente se não existir para primeira utilização.
+     *
+     * @param estacaoAtual estação que está realizando login no sistema
+     * @param ocorrencias lista de ocorrências a ser preenchida com dados carregados
+     * @param estacoes lista de todas as estações para referência cruzada
+     * @param areasFlorestais lista de áreas florestais para associação de ocorrências
+     * @param drones lista de drones para associação com registros carregados
      */
     public static void carregarHistoricoDaCidade(EstacaoBombeiros estacaoAtual, ArrayList<Ocorrencia> ocorrencias,
                                                  ArrayList<EstacaoBombeiros> estacoes, ArrayList<AreaFlorestal> areasFlorestais,
@@ -58,13 +72,17 @@ public class Arquivo {
     }
 
     /**
-     * Faz o parse de uma ocorrência a partir do arquivo de texto
-     * @param reader BufferedReader posicionado após a linha de cabeçalho
-     * @param linhaCabecalho Linha com emoji e tipo (🚨 #1 - INCÊNDIO)
-     * @param estacaoAtual Estação atual
-     * @param areasFlorestais Lista de áreas florestais
-     * @param drones Lista de drones
-     * @return Objeto Ocorrencia ou null se erro
+     * Realiza parsing detalhado de uma ocorrência individual do arquivo texto.
+     * Interpreta formato estruturado com emojis e dados hierárquicos, reconstituindo
+     * objeto Ocorrencia completo com todos os relacionamentos e metadados.
+     * Implementa tratamento robusto de erros para garantir integridade dos dados.
+     *
+     * @param reader BufferedReader posicionado após linha de cabeçalho da ocorrência
+     * @param linhaCabecalho linha contendo emoji identificador e tipo de ocorrência
+     * @param estacaoAtual estação responsável pela jurisdição da ocorrência
+     * @param areasFlorestais lista de áreas para associação por nome
+     * @param drones lista de drones para associação com a estação
+     * @return objeto Ocorrencia reconstituído ou null se erro no parsing
      */
     private static Ocorrencia parseOcorrenciaDoArquivo(java.io.BufferedReader reader, String linhaCabecalho,
                                                        EstacaoBombeiros estacaoAtual, ArrayList<AreaFlorestal> areasFlorestais,
@@ -151,10 +169,13 @@ public class Arquivo {
     }
 
     /**
-     * Busca uma área florestal pelo nome
-     * @param nomeArea Nome da área a buscar
-     * @param areasFlorestais Lista de áreas florestais
-     * @return AreaFlorestal encontrada ou null
+     * Busca área florestal específica por correspondência exata de nome.
+     * Utilizado durante carregamento de arquivos para restabelecer
+     * relacionamentos entre ocorrências e áreas florestais.
+     *
+     * @param nomeArea nome completo da área florestal procurada
+     * @param areasFlorestais lista de áreas disponíveis para busca
+     * @return objeto AreaFlorestal correspondente ou null se não encontrado
      */
     private static AreaFlorestal buscarAreaPorNome(String nomeArea, ArrayList<AreaFlorestal> areasFlorestais) {
         for (AreaFlorestal area : areasFlorestais) {
@@ -166,8 +187,11 @@ public class Arquivo {
     }
 
     /**
-     * Pula as linhas restantes de uma ocorrência em caso de erro
-     * @param reader BufferedReader
+     * Pula linhas restantes de uma ocorrência durante erro de parsing.
+     * Mecanismo de recuperação que permite continuar processamento do arquivo
+     * mesmo quando uma ocorrência específica apresenta problemas de formato.
+     *
+     * @param reader BufferedReader posicionado em ocorrência com erro
      */
     private static void pularLinhasOcorrencia(java.io.BufferedReader reader) {
         try {
@@ -184,10 +208,13 @@ public class Arquivo {
     }
 
     /**
-     * Obtém o drone específico de uma estação
-     * @param drones Lista de drones
-     * @param idEstacao ID da estação
-     * @return Drone da estação ou null
+     * Obtém drone designado para uma estação específica.
+     * Busca por correspondência de ID da estação base para garantir
+     * que cada estação utilize seu equipamento designado.
+     *
+     * @param drones lista de drones disponíveis no sistema
+     * @param idEstacao ID da estação proprietária do drone
+     * @return objeto Drone da estação ou null se não encontrado
      */
     private static Drone obterDroneDaEstacao(ArrayList<Drone> drones, int idEstacao) {
         for (Drone drone : drones) {
@@ -199,9 +226,13 @@ public class Arquivo {
     }
 
     /**
-     * Salva o histórico específico de uma cidade
-     * @param ocorrenciasDaEstacao Lista de ocorrências filtrada por estação
-     * @param estacaoAtual Estação atual logada
+     * Salva histórico completo de ocorrências específicas de uma cidade.
+     * Gera arquivo texto estruturado com formatação padronizada, incluindo
+     * cabeçalhos informativos, metadados da estação e registros detalhados
+     * de todas as ocorrências da jurisdição territorial.
+     *
+     * @param ocorrenciasDaEstacao lista filtrada de ocorrências da estação específica
+     * @param estacaoAtual estação responsável pela jurisdição sendo salva
      */
     public static void salvarHistoricoDaCidade(ArrayList<Ocorrencia> ocorrenciasDaEstacao, EstacaoBombeiros estacaoAtual) {
         try {
@@ -243,10 +274,14 @@ public class Arquivo {
     }
 
     /**
-     * Formata o resumo da ocorrência para salvar no arquivo
-     * @param ocorrencia Ocorrência a ser formatada
-     * @param estacaoResponsavel Estação responsável
-     * @return String formatada para arquivo
+     * Formata resumo individual de ocorrência para persistência em arquivo.
+     * Converte objeto Ocorrencia em representação textual estruturada mantendo
+     * todos os dados essenciais em formato padronizado para posterior carregamento.
+     * Preserva emojis e hierarquia para facilitar leitura humana e parsing automático.
+     *
+     * @param ocorrencia objeto Ocorrencia a ser convertido para texto
+     * @param estacaoResponsavel estação responsável pela jurisdição da ocorrência
+     * @return string formatada pronta para escrita em arquivo
      */
     private static String formatarResumoParaArquivo(Ocorrencia ocorrencia, EstacaoBombeiros estacaoResponsavel) {
         StringBuilder sb = new StringBuilder();
