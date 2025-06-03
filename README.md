@@ -98,7 +98,7 @@ O **Forest Guardian Network** surge como resposta tecnológica inovadora para es
 - [Testes](#-testes)
 - [Documentação](#-documentação)
 - [Requisitos Técnicos](#-requisitos-técnicos)
-- [Equipe](#-equipe)
+- [Equipe (2ESPW)](#-equipe)
 
 ## 🎯 Sobre o Projeto
 
@@ -158,6 +158,7 @@ File I/O - Built-in - Persistência de dados
 
 ## 📁 Estrutura do Projeto
 
+```
 forest-guardian-network/
 ├── src/
 │   ├── main/
@@ -193,6 +194,7 @@ forest-guardian-network/
 ├── README.md
 ├── pom.xml
 └── LICENSE
+```
 
 ## 🚀 Instalação
 
