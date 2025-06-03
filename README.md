@@ -448,9 +448,9 @@ Javadoc | ✅ | Documentação completa
 
 ## 👥 Equipe
 
-**Fernanda Rocha Menon** – RM 554673
-**Luiza Macena Dantas** - RM 556237
-**Renan Dias Utida** – RM 558540
+- **Fernanda Rocha Menon** – RM 554673
+- **Luiza Macena Dantas** - RM 556237
+- **Renan Dias Utida** – RM 558540
 
 ## Agradecimentos
 - Corpo de Bombeiros pela consultoria técnica
