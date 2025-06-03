@@ -98,7 +98,7 @@ O **Forest Guardian Network** surge como resposta tecnológica inovadora para es
 - [Testes](#-testes)
 - [Documentação](#-documentação)
 - [Requisitos Técnicos](#-requisitos-técnicos)
-- [Equipe (2ESPW)](#-equipe)
+- [Equipe](#-equipe)
 
 ## 🎯 Sobre o Projeto
 
@@ -134,6 +134,161 @@ O **Forest Guardian Network** é um sistema abrangente de proteção florestal q
 
 ### Diagrama de Classes
 
+```mermaid
+classDiagram
+    %% Classes principais
+    class ForestGuardianNetwork {
+        -String nomeSystem
+        -Date dataIniciacao
+        +coordenarEstacoes()
+        +inicializarSystem()
+        +gerarRelatorioGeral()
+    }
+    
+    class EstacaoBombeiros {
+        -int idEstacao
+        -String nome
+        -String endereco
+        -String telefone
+        +supervisionarAreas()
+        +responderOcorrencia()
+        +administrarEquipamentos()
+    }
+    
+    class AreaFlorestal {
+        -int idArea
+        -String nome
+        -String localizacao
+        -double tamanhoHectares
+        -int idEstacaoResponsavel
+        +gerarOcorrencia()
+        +atualizarStatus()
+    }
+    
+    class Ocorrencia {
+        -int idOcorrencia
+        -AreaFlorestal areaAfetada
+        -int hectaresAfetados
+        -String statusOcorrencia
+        -Date dataOcorrencia
+        +calcularTempoChegada()
+        +marcarComoSegura()
+        +atualizarStatus()
+    }
+    
+    class Usuario {
+        -String nome
+        -String cpf
+        -String telefone
+        -String email
+        +fazerDenuncia()
+        +validarDados()
+    }
+    
+    %% Classe abstrata Equipamento
+    class Equipamento {
+        <<abstract>>
+        #int id
+        #String nome
+        #String tipo
+        +operar()*
+        +exibirInformacoes()*
+        +monitorarArea()
+    }
+    
+    class Drone {
+        -int idEstacaoResponsavel
+        +operar()
+        +exibirInformacoes()
+        +executarVarredura()
+        +exibirAreaIdentificada()
+    }
+    
+    class Sensor {
+        +operar()
+        +exibirInformacoes()
+        +detectarOcorrencia()
+    }
+    
+    class Varredura {
+        -int idVarredura
+        -Date dataVarredura
+        -String resultados
+        -int idDrone
+        +registrarOcorrencia()
+        +analisarArea()
+    }
+    
+    class Casos {
+        -List~Ocorrencia~ ocorrencias
+        +gerenciarOcorrencias()
+        +acionarAlertas()
+        +processarDenuncias()
+        +calcularEstatisticas()
+    }
+    
+    class AlertasIncendio {
+        -int idAlerta
+        -String tipoAlerta
+        -String mensagem
+        -Date dataHora
+        +notificarEstacao()
+        +definirPrioridade()
+    }
+    
+    class Arquivo {
+        -String caminhoArquivo
+        +armazenarDados()
+        +carregarDados()
+        +salvarHistorico()
+    }
+    
+    class RelatoriosEstatisticas {
+        -Date periodo
+        -Map estatisticas
+        +analisarDesempenho()
+        +gerarRelatorio()
+        +calcularMetricas()
+    }
+
+    %% Relacionamentos de Herança
+    Equipamento <|-- Drone : herança
+    Equipamento <|-- Sensor : herança
+    
+    %% Relacionamentos com Cardinalidades
+    ForestGuardianNetwork ||--o{ EstacaoBombeiros : "1:n coordena"
+    EstacaoBombeiros ||--o{ AreaFlorestal : "1:n supervisiona"
+    EstacaoBombeiros ||--o{ Equipamento : "1:n administra"
+    EstacaoBombeiros ||--o{ Ocorrencia : "1:n responde_a"
+    EstacaoBombeiros ||--|| AlertasIncendio : "1:1 recebe_notificacao"
+    
+    AreaFlorestal ||--o{ Ocorrencia : "1:n gera"
+    
+    Sensor |o--o{ Ocorrencia : "0:n detecta"
+    Usuario |o--o{ Ocorrencia : "0:n denuncia"
+    
+    Drone ||--o{ Varredura : "1:n executa"
+    Varredura ||--o{ Ocorrencia : "1:n registra"
+    
+    Equipamento ||--o{ AreaFlorestal : "1:n monitora"
+    
+    Casos ||--o{ Ocorrencia : "1:n gerencia"
+    Casos ||--o{ AlertasIncendio : "1:n aciona"
+    
+    Arquivo ||--o{ EstacaoBombeiros : "1:n armazena_dados_de"
+    RelatoriosEstatisticas ||--o{ EstacaoBombeiros : "1:n analisa"
+
+    %% Estilos para melhor visualização
+    classDef abstractClass fill:#e1f5fe,stroke:#01579b,stroke-width:2px
+    classDef mainClass fill:#f3e5f5,stroke:#4a148c,stroke-width:2px
+    classDef equipmentClass fill:#e8f5e8,stroke:#1b5e20,stroke-width:2px
+    classDef dataClass fill:#fff3e0,stroke:#e65100,stroke-width:2px
+    
+    class Equipamento abstractClass
+    class ForestGuardianNetwork,EstacaoBombeiros,Casos mainClass
+    class Drone,Sensor equipmentClass
+    class Arquivo,RelatoriosEstatisticas dataClass
+```
 
 ### 🎨 Padrões de Design Implementados
 
@@ -445,7 +600,7 @@ Javadoc | ✅ | Documentação completa
 - Cálculos complexos: Tempo de chegada, níveis de risco
 
 
-## 👥 Equipe (2ESPW)
+## 👥 Equipe
 
 **Fernanda Rocha Menon** – RM 554673
 **Luiza Macena Dantas** - RM 556237
