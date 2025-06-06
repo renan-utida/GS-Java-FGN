@@ -3,14 +3,14 @@
 ═══════════════════════════════════════════════════════════════════════════
 🏢 6º Batalhão de Bombeiros de Mogi Mirim
 👮 Cap. Fernanda Lima
-📅 Gerado em: 02/06/2025 19:12:36
+📅 Gerado em: 03/06/2025 13:28:54
 
-📊 Total de registros: 5
+📊 Total de registros: 6
 
 🚨 #1 - INCÊNDIO
     📍 Reserva Biológica de Estiva Gerbi
     🏢 Mogi Mirim, SP
-    ⚠️  Emergência | 📊 Ativo | ⏰ 02/06/2025 19:11
+    ⚠️  Emergência | 📊 Ativo | ⏰ 03/06/2025 13:27
     🔥 120 hectares afetados
     🔍 Drone de varredura
     🚁 FGN-Condor Alpha (#107)
@@ -19,7 +19,7 @@
 ✅ #2 - ÁREA SEGURA
     📍 Mata do Horto Florestal de Itapira
     🏢 Mogi Mirim, SP
-    ⚠️  Seguro | 📊 Concluído | ⏰ 02/06/2025 19:11
+    ⚠️  Seguro | 📊 Concluído | ⏰ 03/06/2025 13:27
     🔍 Drone de varredura
     🚁 FGN-Condor Alpha (#107)
     👤 Denúncia: Drone
@@ -27,7 +27,7 @@
 ✅ #3 - ÁREA SEGURA
     📍 Área de Preservação Permanente do Rio Mogi Guaçu
     🏢 Mogi Mirim, SP
-    ⚠️  Seguro | 📊 Concluído | ⏰ 02/06/2025 19:11
+    ⚠️  Seguro | 📊 Concluído | ⏰ 03/06/2025 13:27
     🔍 Drone de varredura
     🚁 FGN-Condor Alpha (#107)
     👤 Denúncia: Drone
@@ -35,18 +35,27 @@
 🚨 #4 - INCÊNDIO
     📍 Área de Preservação Permanente do Rio Mogi Guaçu
     🏢 Mogi Mirim, SP
-    ⚠️  Investigação | 📊 Ativo | ⏰ 02/06/2025 19:12
+    ⚠️  Investigação | 📊 Ativo | ⏰ 03/06/2025 13:27
     🔥 35 hectares afetados
-    🔍 Sensor de Fumaça FGN-F02
+    🔍 Drone de varredura
     🚁 FGN-Condor Alpha (#107)
     👤 Denúncia: Drone
 
 🚨 #5 - INCÊNDIO
     📍 Reserva Biológica de Estiva Gerbi
     🏢 Mogi Mirim, SP
-    ⚠️  Alerta Ativo | 📊 Ativo | ⏰ 02/06/2025 19:12
+    ⚠️  Alerta Ativo | 📊 Ativo | ⏰ 03/06/2025 13:27
     🔥 90 hectares afetados
-    🔍 Sensor Químico FGN-Q03
+    🔍 Drone de varredura
+    🚁 FGN-Condor Alpha (#107)
+    👤 Denúncia: Drone
+
+🚨 #6 - INCÊNDIO
+    📍 Área de Preservação Permanente do Rio Mogi Guaçu
+    🏢 Mogi Mirim, SP
+    ⚠️  Investigação | 📊 Ativo | ⏰ 03/06/2025 13:28
+    🔥 40 hectares afetados
+    🔍 Sensor Térmico FGN-T01
     🚁 FGN-Condor Alpha (#107)
     👤 Denúncia: Drone
 

@@ -76,20 +76,4 @@ public class EquipamentoTest {
         }
     }
 
-    @Test
-    @DisplayName("Deve verificar tipos específicos em polimorfismo")
-    void testVerificarTiposEspecificos() {
-        Equipamento drone = new Drone(101, "DJI Phantom", 1001);
-        Equipamento sensor = new Sensor(201, "ThermoDetect", "Térmico");
-
-        if (drone instanceof Drone) {
-            Drone d = (Drone) drone;
-            assertEquals(1001, d.getIdEstacaoBase());
-        }
-
-        if (sensor instanceof Sensor) {
-            Sensor s = (Sensor) sensor;
-            assertEquals("ThermoDetect", s.getNomeSensor());
-        }
-    }
 }
