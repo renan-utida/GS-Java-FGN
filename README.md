@@ -184,8 +184,6 @@ forest-guardian-network/
 │           └── fgn/
 │               └── modelo/
 │                   ├── AreaFlorestalTest.java
-│                   ├── ArquivoTest.java
-│                   ├── CasosTest.java
 │                   ├── DroneTest.java 
 │                   ├── EquipamentoTest.java
 │                   ├── EstacaoBombeirosTest.java 
@@ -415,7 +413,7 @@ java -cp ".:junit-platform-console-standalone.jar" org.junit.platform.console.Co
 
 ### Cobertura de Testes
 
-- 57 testes unitários distribuídos em 9 classes
+- Mais de 30 testes unitários distribuídos em 7 classes
 - Cobertura completa de funcionalidades
 - Testes de integração para fluxos principais
 - Validação de herança e polimorfismo
